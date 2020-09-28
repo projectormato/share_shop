@@ -4,8 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'work'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '11'
 
 configurations {
@@ -34,5 +33,3 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
-
-version = '0.0.1'
