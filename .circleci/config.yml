@@ -1,0 +1,56 @@
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@1.0.1
+
+workflows:
+  heroku_deploy:
+    jobs:
+      - build
+      - start_deploy:
+          type: approval
+          requires:
+            - build
+      - heroku/deploy-via-git:
+          requires:
+            - start_deploy
+
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:11-jdk
+      - image: postgres:12
+        environment:
+          POSTGRES_USER: ttdd
+          POSTGRES_DB: ttdd
+          POSTGRES_PASSWORD: password
+
+    working_directory: ~/repo
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 20`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgress && exit 1
+      - run:
+          name: Run unit tests
+          command: ./gradlew test

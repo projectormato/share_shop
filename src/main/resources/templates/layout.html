@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">TTDD</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" media="all" th:href="@{/css/style.css}"/>
+</head>
+<body class="facebook_bg">
+<nav class="navbar facebook_color mb-4">
+    <a class="navbar-brand text-white ml-5" th:href="@{/}">
+        <div class="layout_nav h1">TTDD</div>
+    </a>
+</nav>
+<div layout:fragment="content"></div>
+
+<footer class="page-footer font-small blue">
+    <div class="footer-copyright text-center py-3">
+        ttdd © 2020
+    </div>
+</footer>
+</body>
+</html>

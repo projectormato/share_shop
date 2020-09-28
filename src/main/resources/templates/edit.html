@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>問題編集</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <h1>問題を編集</h1>
+    </div>
+    <div class="row">
+        <form th:action="@{/problem/{id}(id=${problem.getId()})}" th:object="${problemPostForm}" th:method="put">
+            <label for="title">問題のタイトル:</label>
+            <input id="title" type="text" th:field="*{title}"><br>
+
+            <label for="description">問題の説明:</label><br>
+            <textarea id="description" th:field="*{description}" rows="10" cols="70"></textarea><br>
+
+            <input class="btn btn-primary mt-3" type="submit" value="この内容で更新する">
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:12
+    container_name: ttdd-db
+    environment:
+      - POSTGRES_USER=ttdd
+      - POSTGRES_PASSWORD=password
+      - PGPASSWORD=password
+      - POSTGRES_DB=ttdd
+      - DATABASE_HOST=localhost
+    ports:
+      - "5432:5432"

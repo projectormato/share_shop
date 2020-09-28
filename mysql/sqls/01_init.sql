@@ -1,0 +1,6 @@
+DROP DATABASE IF EXISTS final;
+DROP USER IF EXISTS final;
+CREATE USER final;
+SET PASSWORD FOR final ='mypassword';
+CREATE DATABASE final;
+GRANT ALL ON final.* TO final;

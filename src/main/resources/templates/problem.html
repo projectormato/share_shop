@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title th:text="${problem.getTitle()}"></title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="col">
+            <h1 th:text="${problem.getTitle()}"></h1>
+            <p th:text="${problem.getDescription()}"></p>
+
+            <div th:each="question : ${questionList}" class="container card mb-3 py-3">
+                <h5 th:text="${question.getStatement()}"></h5>
+                <div th:each="choice : ${choiceMap.get(question.getId())}" class="mb-2">
+                    <span>・</span><span th:text="${choice.getContent()}"></span><span
+                        th:if="${choice.getCorrectFlag()}">(正解の選択肢)</span><br>
+                </div>
+                <form th:action="@{/problem/{problemId}/question/{questionId}/choice(problemId=${problem.getId()}, questionId=${question.getId()})}"
+                      th:object="${choicePostFrom}" method="post">
+                    <label for="content">新しい選択肢:</label>
+                    <input id="content" type="text" th:field="*{content}"><br>
+
+                    <label for="correct-flag">この選択肢を正解にする</label>
+                    <input id="correct-flag" type="checkbox" th:field="*{correctFlag}"><br>
+
+                    <input class="btn btn-primary" type="submit" value="この選択肢を追加">
+                </form>
+            </div>
+        </div>
+
+        <div class="col">
+            <h2>設問を作成</h2>
+            <form th:action="@{/problem/{id}/question(id=${problem.getId()})}" th:object="${questionPostForm}"
+                  method="post">
+                <label for="statement">設問文:</label><br>
+                <input id="statement" type="text" th:field="*{statement}"><br>
+
+                <input class="btn btn-primary mt-3" type="submit" value="設問を作成">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
