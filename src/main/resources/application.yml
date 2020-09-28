@@ -1,15 +1,15 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/ttdd
-    username: ttdd
-    password: password
-    initialization-mode: always
+    url:  jdbc:mysql://127.0.0.1:3306/ss
+    username: ss
+    password: mypassword
+    driverClassName: com.mysql.cj.jdbc.Driver
     schema: classpath:schema.sql
+    initialization-mode: always
   jpa:
     hibernate:
       ddl-auto: none
-    database: POSTGRESQL
+    database: MYSQL
   mvc:
     hiddenmethod:
       filter:

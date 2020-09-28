@@ -1,13 +1,15 @@
 version: "3.7"
 services:
   db:
-    image: postgres:12
-    container_name: ttdd-db
+    image: mysql:8.0.15
+    container_name: ss-db
     environment:
-      - POSTGRES_USER=ttdd
-      - POSTGRES_PASSWORD=password
-      - PGPASSWORD=password
-      - POSTGRES_DB=ttdd
-      - DATABASE_HOST=localhost
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ss
+      MYSQL_USER: ss
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - ./mysql/sqls:/docker-entrypoint-initdb.d
     ports:
-      - "5432:5432"
+      - "3306:3306"
