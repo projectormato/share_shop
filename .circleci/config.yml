@@ -19,11 +19,11 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:11-jdk
-      - image: postgres:12
+      - image: mysql:8.0.15
         environment:
-          POSTGRES_USER: ttdd
-          POSTGRES_DB: ttdd
-          POSTGRES_PASSWORD: password
+          MYSQL_USER: ss
+          MYSQL_DATABASE: ss
+          MYSQL_PASSWORD: mypassword
 
     working_directory: ~/repo
     environment:
@@ -42,15 +42,15 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
       - run:
-          name: Waiting for Postgres to be ready
+          name: Waiting for MySQL to be ready
           command: |
             for i in `seq 1 20`;
             do
-              nc -z localhost 5432 && echo Success && exit 0
+              nc -z localhost 3306 && echo Success && exit 0
               echo -n .
               sleep 1
             done
-            echo Failed waiting for Postgress && exit 1
+            echo Failed waiting for MySQL && exit 1
       - run:
           name: Run unit tests
           command: ./gradlew test
