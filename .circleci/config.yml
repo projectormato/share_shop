@@ -24,6 +24,7 @@ jobs:
           MYSQL_USER: ss
           MYSQL_DATABASE: ss
           MYSQL_PASSWORD: mypassword
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
 
     working_directory: ~/repo
     environment:
