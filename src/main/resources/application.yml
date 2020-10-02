@@ -14,3 +14,15 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${OAUTH_CLIENT_ID}
+            client-secret: ${OAUTH_CLIENT_SECRET}
+
+ss:
+  security:
+    useHttps: false

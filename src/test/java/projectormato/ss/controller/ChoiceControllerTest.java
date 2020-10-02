@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import projectormato.ss.entity.Choice;
@@ -15,6 +16,7 @@ import projectormato.ss.repository.QuestionRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -22,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithMockUser
 class ChoiceControllerTest extends ControllerTestBase {
     @Autowired
     private MockMvc mockMvc;
@@ -47,7 +50,7 @@ class ChoiceControllerTest extends ControllerTestBase {
 
         this.mockMvc.perform(post("/problem/" + problem.getId() + "/question/" + question.getId() + "/choice")
                 .param("content", "フライパン")
-                .param("correctFlag", "true"))
+                .param("correctFlag", "true").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(header().string("Location", "/problem/" + problem.getId()));
@@ -66,7 +69,7 @@ class ChoiceControllerTest extends ControllerTestBase {
 
         this.mockMvc.perform(post("/problem/" + problem.getId() + "/question/" + question.getId() + "/choice")
                 .param("content", "フライパン")
-                .param("correctFlag", "false"))
+                .param("correctFlag", "false").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(header().string("Location", "/problem/" + problem.getId()));
@@ -86,7 +89,7 @@ class ChoiceControllerTest extends ControllerTestBase {
 
         this.mockMvc.perform(post("/problem/" + problem.getId() + "/question/" + question.getId() + "/choice")
                 .param("content", "フライパン2")
-                .param("correctFlag", "true"))
+                .param("correctFlag", "true").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(header().string("Location", "/problem/" + problem.getId()));
