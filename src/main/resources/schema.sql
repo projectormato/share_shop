@@ -21,3 +21,19 @@ CREATE TABLE IF NOT EXISTS choice
      question_id  BIGINT NOT NULL,
      FOREIGN KEY (question_id) REFERENCES question(question_id)
   );
+
+CREATE TABLE IF NOT EXISTS shop
+  (
+     shop_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
+     user_id  BIGINT NOT NULL,
+     `name`   VARCHAR(100) NOT NULL,
+     address  VARCHAR(1000) NOT NULL,
+     hours    VARCHAR(1000) NOT NULL
+  );
+
+CREATE TABLE IF NOT EXISTS share_shared
+  (
+     share_shared_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
+     share_id         BIGINT NOT NULL,
+     shared_id        BIGINT NOT NULL
+  );
