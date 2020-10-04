@@ -29,17 +29,6 @@ public class ProblemController {
     @Autowired
     ChoiceService choiceService;
 
-    @PostMapping(path = "/problem")
-    public String createProblem(ProblemPostForm form) {
-        problemService.save(
-                Problem.builder()
-                        .title(form.getTitle())
-                        .description(form.getDescription())
-                        .build()
-        );
-        return "redirect:/";
-    }
-
     @GetMapping("/problem/{id}")
     public String showProblem(@PathVariable Long id, Model model) {
         final var problem = problemService.findById(id);

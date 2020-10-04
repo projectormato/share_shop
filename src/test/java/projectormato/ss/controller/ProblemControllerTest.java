@@ -44,18 +44,6 @@ class ProblemControllerTest extends ControllerTestBase {
     QuestionRepository questionRepository;
 
     @Test
-    void タイトルと概要を入れて問題が作成できること() throws Exception {
-        this.mockMvc.perform(post("/problem")
-                .param("title", "Problem Title")
-                .param("description", "Problem Description").with(csrf()))
-                .andDo(print())
-                .andExpect(status().isFound());
-        final var problemList = problemRepository.findAll();
-        assertEquals(problemList.get(0).getTitle(), "Problem Title");
-        assertEquals(problemList.get(0).getDescription(), "Problem Description");
-    }
-
-    @Test
     void 問題詳細ページにアクセスすると設問一覧が返ること() throws Exception {
         final var problem = Problem.builder().title("problem").description("this is Problem").build();
         problemRepository.save(problem);
