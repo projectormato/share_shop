@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS choice
 CREATE TABLE IF NOT EXISTS shop
   (
      shop_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
-     user_id  BIGINT NOT NULL,
+     user_id  VARCHAR(100) NOT NULL,
      `name`   VARCHAR(100) NOT NULL,
      address  VARCHAR(1000) NOT NULL,
      hours    VARCHAR(1000) NOT NULL

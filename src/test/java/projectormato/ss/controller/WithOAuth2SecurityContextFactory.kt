@@ -9,7 +9,10 @@ class WithOAuth2SecurityContextFactory : WithSecurityContextFactory<WithMockOAut
 
     override fun createSecurityContext(user: WithMockOAuth2User): SecurityContext {
         val context = SecurityContextHolder.createEmptyContext()
-        val attributes = mapOf<String, Any>("sub" to "1", "email" to "tomato@example.com")
+        val attributes = mapOf<String, Any>(
+                "sub" to "1",
+                "email" to "tomato@example.com"
+        )
         val authorities = listOf(OAuth2UserAuthority("ROLE_USER", attributes))
         val oAuth2User = DefaultOAuth2User(authorities, attributes, "sub")
         val token = OAuth2AuthenticationToken(oAuth2User, authorities, "Google")

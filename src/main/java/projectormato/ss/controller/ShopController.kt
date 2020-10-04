@@ -12,8 +12,7 @@ class ShopController(private val shopService: ShopService) {
 
     @GetMapping(path = ["/"])
     fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
-        // NOTE: nameが大きい
-        model.addAttribute("shopList", shopService.findByUserId(1))
+        model.addAttribute("shopList", shopService.findByUserId(user.name))
         return "index"
     }
 

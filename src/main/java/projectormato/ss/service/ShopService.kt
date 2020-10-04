@@ -7,5 +7,5 @@ import projectormato.ss.repository.ShopRepository
 @Service
 class ShopService(private val shopRepository: ShopRepository) {
 
-    fun findByUserId(userId: Long): List<Shop> = shopRepository.findByUserId(userId)
+    fun findByUserId(userId: String): List<Shop> = shopRepository.findByUserId(userId)
 }

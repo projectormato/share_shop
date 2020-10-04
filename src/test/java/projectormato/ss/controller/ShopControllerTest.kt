@@ -3,19 +3,19 @@ package projectormato.ss.controller
 import WithMockOAuth2User
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import projectormato.ss.entity.Shop
 import java.util.*
-import kotlin.jvm.Throws
 
+@SpringBootTest
 @WithMockOAuth2User
 internal class ShopControllerTest : ControllerTestBase() {
 
     @Test
-    @Throws(Exception::class)
     fun お店一覧ページにアクセスするとレスポンス200と想定したviewが返ること() {
         val mvcResult: MvcResult = mockMvc.perform(get("/"))
                 .andDo(print()).andExpect(status().isOk).andReturn()
@@ -23,11 +23,10 @@ internal class ShopControllerTest : ControllerTestBase() {
     }
 
     @Test
-    @Throws(java.lang.Exception::class)
     fun お店一覧ページにアクセスするとお店一覧が返ること_要素1() {
         // Given
-        val shop = Shop.builder().name("shop1").address("tokyo").hours("all time").userId(1).build()
-        val otherUserShop = Shop.builder().name("shop1").address("tokyo").hours("all time").userId(2).build()
+        val shop = Shop.builder().name("shop1").address("tokyo").hours("all time").userId("1").build()
+        val otherUserShop = Shop.builder().name("shop1").address("tokyo").hours("all time").userId("2").build()
         shopRepository.saveAll(listOf(shop, otherUserShop))
 
         //When
@@ -51,11 +50,10 @@ internal class ShopControllerTest : ControllerTestBase() {
     }
 
     @Test
-    @Throws(java.lang.Exception::class)
     fun お店一覧ページにアクセスするとお店一覧が返ること_要素2() {
         // Given
-        val shop1 = Shop.builder().name("shop1").address("tokyo").hours("all time").userId(1).build()
-        val shop2 = Shop.builder().name("shop2").address("kanagawa").hours("all time").userId(1).build()
+        val shop1 = Shop.builder().name("shop1").address("tokyo").hours("all time").userId("1").build()
+        val shop2 = Shop.builder().name("shop2").address("kanagawa").hours("all time").userId("1").build()
         val expectedShopList = listOf(shop1, shop2)
         shopRepository.saveAll(expectedShopList)
 
