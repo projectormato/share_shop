@@ -19,6 +19,6 @@ internal class LoginControllerTest : ControllerTestBase() {
     fun loginページにアクセスしたらレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/login"))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk).andReturn()
-        Assertions.assertEquals(Objects.requireNonNull(mvcResult.modelAndView).viewName, "login")
+        Assertions.assertEquals("login", Objects.requireNonNull(mvcResult.modelAndView).viewName)
     }
 }

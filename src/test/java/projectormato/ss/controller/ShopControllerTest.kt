@@ -21,7 +21,7 @@ internal class ShopControllerTest : ControllerTestBase() {
     fun お店一覧ページにアクセスするとレスポンス200と想定したviewが返ること() {
         val mvcResult: MvcResult = mockMvc.perform(get("/"))
                 .andDo(print()).andExpect(status().isOk).andReturn()
-        assertEquals(Objects.requireNonNull(mvcResult.modelAndView).viewName, "index")
+        assertEquals("index", Objects.requireNonNull(mvcResult.modelAndView).viewName)
     }
 
     @Test
@@ -38,13 +38,13 @@ internal class ShopControllerTest : ControllerTestBase() {
         // Then
         assertEquals(Objects.requireNonNull(mvcResult.modelAndView).viewName, "index")
         if (shopList is List<*>) {
-            assertEquals(shopList.size, 1)
+            assertEquals(1, shopList.size)
             shopList.forEach {
                 if (it is Shop) {
-                    assertEquals(it.name, shop.name)
-                    assertEquals(it.address, shop.address)
-                    assertEquals(it.hours, shop.hours)
-                    assertEquals(it.userId, shop.userId)
+                    assertEquals(shop.name, it.name)
+                    assertEquals(shop.address, it.address)
+                    assertEquals(shop.hours, it.hours)
+                    assertEquals(shop.userId, it.userId)
                 }
             }
         }
@@ -63,13 +63,13 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         // Then
         if (shopList is List<*>) {
-            assertEquals(shopList.size, 2)
+            assertEquals(2, shopList.size)
             shopList.forEachIndexed { i, shop ->
                 if (shop is Shop) {
-                    assertEquals(shop.name, expectedShopList[i].name)
-                    assertEquals(shop.address, expectedShopList[i].address)
-                    assertEquals(shop.hours, expectedShopList[i].hours)
-                    assertEquals(shop.userId, expectedShopList[i].userId)
+                    assertEquals(expectedShopList[i].name, shop.name)
+                    assertEquals(expectedShopList[i].address, shop.address)
+                    assertEquals(expectedShopList[i].hours, shop.hours)
+                    assertEquals(expectedShopList[i].userId, shop.userId)
                 }
             }
         }
@@ -85,10 +85,10 @@ internal class ShopControllerTest : ControllerTestBase() {
         val shopList = shopRepository.findAll()
 
         // NOTE: 食べログのサイトの情報をベタで持ってきてテストしている。スクレイピングのもっと良い方法あるかな
-        assertEquals(shopList[0].url, "https://tabelog.com/tokyo/A1321/A132101/13137795/")
-        assertEquals(shopList[0].name, "ステーキガスト 落合南長崎店")
-        assertEquals(shopList[0].address, "東京都豊島区南長崎4-5-20 iTerrace落合南長崎 2F 大きな地図を見る 周辺のお店を探す")
-        assertEquals(shopList[0].hours, "営業時間 [月～金] 11:00～24:00 [土・日・祝] 10:00～24:00 日曜営業 定休日 年中無休 ")
+        assertEquals("https://tabelog.com/tokyo/A1321/A132101/13137795/", shopList[0].url)
+        assertEquals("ステーキガスト 落合南長崎店", shopList[0].name)
+        assertEquals("東京都豊島区南長崎4-5-20 iTerrace落合南長崎 2F 大きな地図を見る 周辺のお店を探す", shopList[0].address)
+        assertEquals("営業時間 [月～金] 11:00～24:00 [土・日・祝] 10:00～24:00 日曜営業 定休日 年中無休 ", shopList[0].hours)
     }
 
     private fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
