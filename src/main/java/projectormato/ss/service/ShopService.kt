@@ -8,4 +8,6 @@ import projectormato.ss.repository.ShopRepository
 class ShopService(private val shopRepository: ShopRepository) {
 
     fun findByUserId(userId: String): List<Shop> = shopRepository.findByUserId(userId)
+
+    fun save(shop: Shop): Shop = shopRepository.save(shop)
 }

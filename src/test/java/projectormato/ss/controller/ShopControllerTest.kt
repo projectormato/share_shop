@@ -4,7 +4,9 @@ import WithMockOAuth2User
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.MvcResult
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -25,9 +27,8 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店一覧ページにアクセスするとお店一覧が返ること_要素1() {
         // Given
-        val shop = Shop.builder().name("shop1").address("tokyo").hours("all time").userId("1").build()
-        val otherUserShop = Shop.builder().name("shop1").address("tokyo").hours("all time").userId("2").build()
-        shopRepository.saveAll(listOf(shop, otherUserShop))
+        val shop = createShop("1")
+        shopRepository.saveAll(listOf(shop, createShop("2")))
 
         //When
         val mvcResult = mockMvc.perform(get("/"))
@@ -52,9 +53,7 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店一覧ページにアクセスするとお店一覧が返ること_要素2() {
         // Given
-        val shop1 = Shop.builder().name("shop1").address("tokyo").hours("all time").userId("1").build()
-        val shop2 = Shop.builder().name("shop2").address("kanagawa").hours("all time").userId("1").build()
-        val expectedShopList = listOf(shop1, shop2)
+        val expectedShopList = listOf(createShop("1"), createShop("1"))
         shopRepository.saveAll(expectedShopList)
 
         // When
@@ -75,4 +74,17 @@ internal class ShopControllerTest : ControllerTestBase() {
             }
         }
     }
+
+    @Test
+    fun URLを入れてお店が投稿できること() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/shop")
+                .param("url", "https://tabelog.com/tokyo/A1321/A132101/13137795/")
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isFound)
+        val shopList = shopRepository.findAll()
+        assertEquals(shopList[0].url, "https://tabelog.com/tokyo/A1321/A132101/13137795/")
+    }
+
+    private fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
 }
