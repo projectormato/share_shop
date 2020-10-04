@@ -1,5 +1,3 @@
-DROP TABLE shop;
-
 CREATE TABLE IF NOT EXISTS problem
   (
      problem_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
