@@ -4,6 +4,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -23,7 +24,7 @@ class ShopController(private val shopService: ShopService) {
     }
 
     @GetMapping(path = ["/shop/{id}"])
-    fun shopDetail(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable id: Long ): String {
+    fun shopDetail(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable id: Long): String {
         val shop = shopService.findByIdAndUserId(id, user.name)
         return if (shop != null) {
             model.addAttribute("shop", shop)
@@ -31,6 +32,12 @@ class ShopController(private val shopService: ShopService) {
         } else {
             "redirect:/"
         }
+    }
+
+    @DeleteMapping(path = ["/shop/{id}"])
+    fun deleteShop(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable id: Long): String {
+        shopService.deleteById(id, user.name)
+        return "redirect:/"
     }
 
     @PostMapping(path = ["/shop"])

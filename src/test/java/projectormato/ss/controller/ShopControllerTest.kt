@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
@@ -129,6 +130,40 @@ internal class ShopControllerTest : ControllerTestBase() {
         // Then
         assertEquals("redirect:/", Objects.requireNonNull(mvcResult.modelAndView).viewName)
     }
+
+    @Test
+    fun お店を削除できること() {
+        // Given 2件作成
+        val shop = createShop("1")
+        shopRepository.saveAll(listOf(shop, createShop("2")))
+
+        //When
+        mockMvc.perform(delete("/shop/" + shop.id))
+                .andDo(print())
+                .andExpect(status().isFound)
+                .andExpect(header().string("Location", "/"))
+
+        // Then 1件になる
+        assertEquals(1, shopRepository.findAll().size)
+    }
+
+    @Test
+    fun 他人のお店は削除できないこと() {
+        // Given 2件作成
+        val shop = createShop("1")
+        val otherShop = createShop("2")
+        shopRepository.saveAll(listOf(shop, otherShop))
+
+        //When
+        mockMvc.perform(delete("/shop/" + otherShop.id))
+                .andDo(print())
+                .andExpect(status().isFound)
+                .andExpect(header().string("Location", "/"))
+
+        // Then 2件ある
+        assertEquals(2, shopRepository.findAll().size)
+    }
+
 
     private fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
 }

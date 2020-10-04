@@ -36,6 +36,13 @@ class ShopService(private val shopRepository: ShopRepository) {
 
     fun findByIdAndUserId(id: Long, userId: String): Shop? = shopRepository.findByIdAndUserId(id, userId)
 
+    fun deleteById(id: Long, userId: String): Unit {
+        val shop = this.findByIdAndUserId(id, userId)
+        if (shop != null) {
+            shopRepository.delete(shop)
+        }
+    }
+
 }
 
 data class ShopInfo(
