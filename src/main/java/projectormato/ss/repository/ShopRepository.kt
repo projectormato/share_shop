@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository
 import projectormato.ss.entity.Shop
 
 @Repository
-interface ShopRepository : JpaRepository<Shop, Long>
+interface ShopRepository : JpaRepository<Shop, Long> {
+    fun findByUserId(userId: Long): List<Shop>
+}
