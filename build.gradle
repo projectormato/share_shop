@@ -36,6 +36,7 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
     compile 'org.jetbrains.kotlin:kotlin-reflect:1.4.10'
+    compile 'org.jsoup:jsoup:1.13.1'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

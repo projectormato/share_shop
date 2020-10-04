@@ -1,5 +1,6 @@
 package projectormato.ss.controller
 
+import org.jsoup.Jsoup
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Controller
@@ -22,16 +23,47 @@ class ShopController(private val shopService: ShopService) {
 
     @PostMapping(path = ["/shop"])
     fun createProblem(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm): String {
+        if (!form.url.startsWith("https://tabelog.com/")) {
+            return "redirect:/"
+        }
+        val shopInfo: ShopInfo = scrapingPage(form.url)
         shopService.save(
                 Shop.builder()
                         .userId(user.name)
                         .url(form.url)
-                        .name("固定shopName")
-                        .address("固定Address")
-                        .hours("固定Hours")
+                        .name(shopInfo.name)
+                        .address(shopInfo.address)
+                        .hours(shopInfo.hours)
                         .build()
         )
         return "redirect:/"
     }
 
+    private fun scrapingPage(url: String): ShopInfo {
+        val document = Jsoup.connect(url).get()
+        val shopInfoTr = document.select(".rstinfo-table__table").first().select("tbody").first().select("tr")
+        var shopName = ""
+        var address = ""
+        var hours = ""
+        shopInfoTr.forEach {
+            when (it.select("th").first().text()) {
+                "店名" -> {
+                    shopName = it.select("td").first().text()
+                }
+                "住所" -> {
+                    address = it.select("td").first().text()
+                }
+                "営業時間・ 定休日" -> {
+                    hours = it.select("td").first().text().split("営業時間・")[0];
+                }
+            }
+        }
+        return ShopInfo(shopName, address, hours)
+    }
 }
+
+data class ShopInfo(
+        val name: String,
+        val address: String,
+        val hours: String
+)

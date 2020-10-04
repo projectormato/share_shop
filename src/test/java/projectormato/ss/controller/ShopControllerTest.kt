@@ -76,14 +76,19 @@ internal class ShopControllerTest : ControllerTestBase() {
     }
 
     @Test
-    fun URLを入れてお店が投稿できること() {
+    fun URLをshareするとお店情報を取得してお店が作成されること() {
         mockMvc.perform(MockMvcRequestBuilders.post("/shop")
                 .param("url", "https://tabelog.com/tokyo/A1321/A132101/13137795/")
                 .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isFound)
         val shopList = shopRepository.findAll()
+
+        // NOTE: 食べログのサイトの情報をベタで持ってきてテストしている。スクレイピングのもっと良い方法あるかな
         assertEquals(shopList[0].url, "https://tabelog.com/tokyo/A1321/A132101/13137795/")
+        assertEquals(shopList[0].name, "ステーキガスト 落合南長崎店")
+        assertEquals(shopList[0].address, "東京都豊島区南長崎4-5-20 iTerrace落合南長崎 2F 大きな地図を見る 周辺のお店を探す")
+        assertEquals(shopList[0].hours, "営業時間 [月～金] 11:00～24:00 [土・日・祝] 10:00～24:00 日曜営業 定休日 年中無休 ")
     }
 
     private fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
