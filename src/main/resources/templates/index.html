@@ -10,36 +10,14 @@
         <div class="col">
             <h2>お店一覧</h2>
             <div th:each="shop : ${shopList}" class="container card mb-3 py-3">
-                <div class="row d-flex justify-content-center">
-                    <h3 th:text="${shop.getName()}"></h3>
-                </div>
-                <div th:text="${shop.getUrl()}" class="row d-flex justify-content-center"></div>
-                <div th:text="${shop.getAddress()}" class="row d-flex justify-content-center"></div>
-                <div th:text="${shop.getHours()}" class="row d-flex justify-content-center"></div>
-                <!--                <div class="row">-->
-                <!--                    <div class="col">-->
-                <!--                        <a th:href="'problem/' + ${problem.getId()}">-->
-                <!--                            <p>設問一覧へ</p>-->
-                <!--                        </a>-->
-                <!--                    </div>-->
-                <!--                    <div class="col">-->
-                <!--                        <a th:href="'problem/' + ${problem.getId()} + '/answer'">-->
-                <!--                            <p>この問題に解答する</p>-->
-                <!--                        </a>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="row">-->
-                <!--                    <div class="col">-->
-                <!--                        <a th:href="'problem/' + ${problem.getId()} + '/edit'">-->
-                <!--                            <p>この問題を編集する</p>-->
-                <!--                        </a>-->
-                <!--                    </div>-->
-                <!--                    <div class="col">-->
-                <!--                        <form th:action="@{/problem/{id}(id=${problem.getId()})}" th:method="delete">-->
-                <!--                            <input class="btn btn-danger" type="submit" value="この問題を削除する">-->
-                <!--                        </form>-->
-                <!--                    </div>-->
-                <!--                </div>-->
+                <a th:href="'shop/' + ${shop.getId()}">
+                    <div class="row d-flex justify-content-center">
+                        <h3 th:text="${shop.getName()}"></h3>
+                    </div>
+                    <div th:text="${shop.getUrl()}" class="row d-flex justify-content-center"></div>
+                    <div th:text="${shop.getAddress()}" class="row d-flex justify-content-center"></div>
+                    <div th:text="${shop.getHours()}" class="row d-flex justify-content-center"></div>
+                </a>
             </div>
         </div>
 

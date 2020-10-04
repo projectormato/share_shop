@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>お店詳細</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <h1 th:text="${shop.getName()}"></h1>
+    </div>
+    <div th:text="${shop.getUrl()}" class="row"></div>
+    <div th:text="${shop.getAddress()}" class="row"></div>
+    <div th:text="${shop.getHours()}" class="row"></div>
+    <div class="row">
+        <form th:action="@{/shop/{id}(id=${shop.getId()})}" th:method="delete">
+            <input class="btn btn-danger" type="submit" value="このお店を削除する">
+        </form>
+    </div>
+</div>
+</body>
+</html>

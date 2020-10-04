@@ -7,4 +7,6 @@ import projectormato.ss.entity.Shop
 @Repository
 interface ShopRepository : JpaRepository<Shop, Long> {
     fun findByUserId(userId: String): List<Shop>
+
+    fun findByIdAndUserId(id: Long, userId: String): Shop?
 }

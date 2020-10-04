@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import projectormato.ss.entity.Shop
 import java.util.*
@@ -36,7 +37,7 @@ internal class ShopControllerTest : ControllerTestBase() {
         val shopList = Objects.requireNonNull(mvcResult.modelAndView).model["shopList"]
 
         // Then
-        assertEquals(Objects.requireNonNull(mvcResult.modelAndView).viewName, "index")
+        assertEquals("index", Objects.requireNonNull(mvcResult.modelAndView).viewName)
         if (shopList is List<*>) {
             assertEquals(1, shopList.size)
             shopList.forEach {
@@ -89,6 +90,44 @@ internal class ShopControllerTest : ControllerTestBase() {
         assertEquals("ステーキガスト 落合南長崎店", shopList[0].name)
         assertEquals("東京都豊島区南長崎4-5-20 iTerrace落合南長崎 2F 大きな地図を見る 周辺のお店を探す", shopList[0].address)
         assertEquals("営業時間 [月～金] 11:00～24:00 [土・日・祝] 10:00～24:00 日曜営業 定休日 年中無休 ", shopList[0].hours)
+    }
+
+    @Test
+    fun お店詳細ページでお店の情報が表示されること() {
+        // Given
+        val shop = createShop("1")
+        shopRepository.saveAll(listOf(shop, createShop("2")))
+
+        //When
+        val mvcResult = mockMvc.perform(get("/shop/" + shop.id))
+                .andDo(print()).andExpect(status().isOk).andReturn()
+        val actualShop = Objects.requireNonNull(mvcResult.modelAndView).model["shop"]
+
+        // Then
+        assertEquals("detail", Objects.requireNonNull(mvcResult.modelAndView).viewName)
+        if (actualShop is Shop) {
+            assertEquals(shop.name, actualShop.name)
+            assertEquals(shop.address, actualShop.address)
+            assertEquals(shop.hours, actualShop.hours)
+            assertEquals(shop.userId, actualShop.userId)
+        }
+    }
+
+    @Test
+    fun 他人のお店詳細ページは表示されないこと() {
+        // Given
+        val shop = createShop("1")
+        val otherShop = createShop("2")
+        shopRepository.saveAll(listOf(shop, otherShop))
+
+        //When
+        val mvcResult = mockMvc.perform(get("/shop/" + otherShop.id))
+                .andDo(print()).andExpect(status().is3xxRedirection)
+                .andExpect(header().string("Location", "/"))
+                .andReturn()
+
+        // Then
+        assertEquals("redirect:/", Objects.requireNonNull(mvcResult.modelAndView).viewName)
     }
 
     private fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
