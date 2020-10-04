@@ -24,10 +24,6 @@ public class ProblemService {
     @Autowired
     ChoiceRepository choiceRepository;
 
-    public List<Problem> findAll() {
-        return problemRepository.findAll();
-    }
-
     public Problem save(Problem problem) {
         return problemRepository.save(problem);
     }

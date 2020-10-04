@@ -44,42 +44,6 @@ class ProblemControllerTest extends ControllerTestBase {
     QuestionRepository questionRepository;
 
     @Test
-    void 問題一覧ページにアクセスするとレスポンス200と想定したviewが返ること() throws Exception {
-        final var mvcResult = this.mockMvc.perform(get("/"))
-                .andDo(print()).andExpect(status().isOk()).andReturn();
-        assertEquals(Objects.requireNonNull(mvcResult.getModelAndView()).getViewName(), "index");
-    }
-
-    @Test
-    void 問題一覧ページにアクセスすると問題一覧が返ること_要素1() throws Exception {
-        final var problem = Problem.builder().title("problem1").description("this is Problem1").build();
-        problemRepository.save(problem);
-        final var mvcResult = this.mockMvc.perform(get("/"))
-                .andDo(print()).andExpect(status().isOk()).andReturn();
-        var problemList = (List<Problem>) Objects.requireNonNull(mvcResult.getModelAndView()).getModel().get("problemList");
-        assertEquals(Objects.requireNonNull(mvcResult.getModelAndView()).getViewName(), "index");
-        assertEquals(problemList.size(), 1);
-        assertEquals(problemList.get(0).getTitle(), problem.getTitle());
-        assertEquals(problemList.get(0).getDescription(), problem.getDescription());
-    }
-
-    @Test
-    void 問題一覧ページにアクセスすると問題一覧が返ること_要素2() throws Exception {
-        final var problem1 = Problem.builder().title("problem1").description("this is Problem1").build();
-        final var problem2 = Problem.builder().title("problem2").description("this is Problem2").build();
-        final var expectedProblemList = List.of(problem1, problem2);
-        problemRepository.saveAll(expectedProblemList);
-        final var mvcResult = this.mockMvc.perform(get("/"))
-                .andDo(print()).andExpect(status().isOk()).andReturn();
-        final var problemList = (List<Problem>) Objects.requireNonNull(mvcResult.getModelAndView()).getModel().get("problemList");
-        for (int i = 0; i < problemList.size(); i++) {
-            assertEquals(expectedProblemList.get(i).getId(), problemList.get(i).getId());
-            assertEquals(expectedProblemList.get(i).getTitle(), problemList.get(i).getTitle());
-            assertEquals(expectedProblemList.get(i).getDescription(), problemList.get(i).getDescription());
-        }
-    }
-
-    @Test
     void タイトルと概要を入れて問題が作成できること() throws Exception {
         this.mockMvc.perform(post("/problem")
                 .param("title", "Problem Title")

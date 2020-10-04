@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import javax.servlet.SessionTrackingMode
+import kotlin.jvm.Throws
 
 @Configuration
 @EnableWebSecurity
@@ -34,7 +35,7 @@ open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http.authorizeRequests()
-                .antMatchers("/login")
+                .antMatchers("/login", "/css/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -10,31 +10,36 @@ import org.springframework.web.context.WebApplicationContext;
 import projectormato.ss.repository.ChoiceRepository;
 import projectormato.ss.repository.ProblemRepository;
 import projectormato.ss.repository.QuestionRepository;
+import projectormato.ss.repository.ShopRepository
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ControllerTestBase {
+open class ControllerTestBase {
+    protected lateinit var mockMvc: MockMvc
+
+    // TODO: Autowiredなくしたい by tomato
     @Autowired
-    private MockMvc mockMvc;
+    protected lateinit var webApplicationContext: WebApplicationContext
 
     @Autowired
-    WebApplicationContext webApplicationContext;
+    protected lateinit var shopRepository: ShopRepository
 
     @Autowired
-    ProblemRepository problemRepository;
+    protected lateinit var problemRepository: ProblemRepository
 
     @Autowired
-    QuestionRepository questionRepository;
+    protected lateinit var questionRepository: QuestionRepository
 
     @Autowired
-    ChoiceRepository choiceRepository;
+    protected lateinit var choiceRepository: ChoiceRepository
 
     @BeforeEach
-    void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        choiceRepository.deleteAll();
-        questionRepository.deleteAll();
-        problemRepository.deleteAll();
+    fun setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+        shopRepository.deleteAll()
+        choiceRepository.deleteAll()
+        questionRepository.deleteAll()
+        problemRepository.deleteAll()
     }
 
 }

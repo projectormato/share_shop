@@ -29,13 +29,6 @@ public class ProblemController {
     @Autowired
     ChoiceService choiceService;
 
-    @GetMapping(path = "/")
-    public String problemList(Model model) {
-        model.addAttribute("problemList", problemService.findAll());
-        model.addAttribute("problemPostForm", new ProblemPostForm());
-        return "index";
-    }
-
     @PostMapping(path = "/problem")
     public String createProblem(ProblemPostForm form) {
         problemService.save(
