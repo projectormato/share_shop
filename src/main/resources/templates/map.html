@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>お店MAP</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row" id="map">
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script type="text/javascript" th:inline="javascript">
+        function initMap() {
+            const shibuya = {lat: 35.666, lng: 139.675};
+            const map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 10, center: shibuya});
+            const marker = new google.maps.Marker({position: shibuya, map: map});
+        }
+    </script>
+    <script defer type="text/javascript" th:inline="javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcQDlV_8EEOtAAWqPKpNPw9msVIlS-eD4&callback=initMap">
+    </script>
+</div>
+</body>
+</html>
