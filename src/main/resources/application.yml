@@ -26,4 +26,4 @@ spring:
 ss:
   security:
     useHttps: false
-  geocoding: ${GEOCODING_API_KEY}
+  geocoding: ${GEOCODING_API_KEY:""}
