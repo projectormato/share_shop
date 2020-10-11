@@ -50,11 +50,12 @@ class ShopService(private val shopRepository: ShopRepository) {
         }
     }
 
-    fun getLocationList(shopList: List<Shop>): List<LatLng> {
+    fun getLocationList(shopList: List<Shop>): List<LatLng?> {
         // TODO: 毎回生成しないようにする
         val context = geoApiContext()
-        return shopList.map { shop ->
-            GeocodingApi.geocode(context, shop.address).await()[0].geometry.location
+        return shopList.map {
+            val await = GeocodingApi.geocode(context, it.address).await()
+            if (await.isNotEmpty()) await[0].geometry.location else null
         }
     }
 
