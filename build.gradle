@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'com.google.maps:google-maps-services:0.15.0'
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
     compile 'org.jetbrains.kotlin:kotlin-reflect:1.4.10'

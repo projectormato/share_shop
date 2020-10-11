@@ -1,12 +1,19 @@
 package projectormato.ss.service
 
+import com.google.maps.GeoApiContext
+import com.google.maps.GeocodingApi
+import com.google.maps.model.LatLng
 import org.jsoup.Jsoup
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import projectormato.ss.entity.Shop
 import projectormato.ss.repository.ShopRepository
 
 @Service
 class ShopService(private val shopRepository: ShopRepository) {
+
+    @Value("\${ss.geocoding}")
+    val geocodingApiKey = ""
 
     fun findByUserId(userId: String): List<Shop> = shopRepository.findByUserId(userId)
 
@@ -43,6 +50,19 @@ class ShopService(private val shopRepository: ShopRepository) {
         }
     }
 
+    fun getLocationList(shopList: List<Shop>): List<LatLng> {
+        // TODO: 毎回生成しないようにする
+        val context = geoApiContext()
+        return shopList.map { shop ->
+            GeocodingApi.geocode(context, shop.address).await()[0].geometry.location
+        }
+    }
+
+    private fun geoApiContext(): GeoApiContext {
+        return GeoApiContext.Builder()
+                .apiKey(geocodingApiKey)
+                .build()
+    }
 }
 
 data class ShopInfo(
