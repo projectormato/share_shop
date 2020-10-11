@@ -21,8 +21,15 @@
             const map = new google.maps.Map(
                 document.getElementById('map'), {zoom: 10, center: shibuya});
             new google.maps.Marker({position: shibuya, map: map});
-            locationList.forEach(location => {
-                new google.maps.Marker({position: location, map: map})
+            locationList.forEach((location, i) => {
+                const marker = new google.maps.Marker({position: location, map: map, title: shopList[i].name});
+                const infoWindow = new google.maps.InfoWindow({
+                    content: "<div>" + shopList[i].name +  "</div>" +
+                    "<a href='" + shopList[i].url + "' target='_blank'>食べログで見る</a>",
+                });
+                marker.addListener("click", () => {
+                    infoWindow.open(map, marker);
+                });
             })
         }
         /*]]>*/
