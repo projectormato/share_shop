@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import projectormato.ss.entity.Shop
 import projectormato.ss.repository.ChoiceRepository
 import projectormato.ss.repository.ProblemRepository
 import projectormato.ss.repository.QuestionRepository
@@ -41,5 +42,8 @@ open class ControllerTestBase {
         questionRepository.deleteAll()
         problemRepository.deleteAll()
     }
+
+    protected fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
+
 
 }

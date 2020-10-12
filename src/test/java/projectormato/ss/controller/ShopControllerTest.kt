@@ -21,8 +21,11 @@ internal class ShopControllerTest : ControllerTestBase() {
 
     @Test
     fun お店一覧ページにアクセスするとレスポンス200と想定したviewが返ること() {
-        val mvcResult: MvcResult = mockMvc.perform(get("/"))
-                .andDo(print()).andExpect(status().isOk).andReturn()
+        val mvcResult = mockMvc
+                .perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk)
+                .andReturn()
         assertEquals("index", Objects.requireNonNull(mvcResult.modelAndView).viewName)
     }
 
@@ -33,8 +36,11 @@ internal class ShopControllerTest : ControllerTestBase() {
         shopRepository.saveAll(listOf(shop, createShop("2")))
 
         //When
-        val mvcResult = mockMvc.perform(get("/"))
-                .andDo(print()).andExpect(status().isOk).andReturn()
+        val mvcResult = mockMvc.
+                perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk)
+                .andReturn()
         val shopList = Objects.requireNonNull(mvcResult.modelAndView).model["shopList"]
 
         // Then
@@ -59,8 +65,11 @@ internal class ShopControllerTest : ControllerTestBase() {
         shopRepository.saveAll(expectedShopList)
 
         // When
-        val mvcResult = mockMvc.perform(get("/"))
-                .andDo(print()).andExpect(status().isOk).andReturn()
+        val mvcResult = mockMvc
+                .perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk)
+                .andReturn()
         val shopList = Objects.requireNonNull(mvcResult.modelAndView).model["shopList"]
 
         // Then
@@ -100,8 +109,11 @@ internal class ShopControllerTest : ControllerTestBase() {
         shopRepository.saveAll(listOf(shop, createShop("2")))
 
         //When
-        val mvcResult = mockMvc.perform(get("/shop/" + shop.id))
-                .andDo(print()).andExpect(status().isOk).andReturn()
+        val mvcResult = mockMvc
+                .perform(get("/shop/" + shop.id))
+                .andDo(print())
+                .andExpect(status().isOk)
+                .andReturn()
         val actualShop = Objects.requireNonNull(mvcResult.modelAndView).model["shop"]
 
         // Then
@@ -163,7 +175,4 @@ internal class ShopControllerTest : ControllerTestBase() {
         // Then 2件ある
         assertEquals(2, shopRepository.findAll().size)
     }
-
-
-    private fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
 }
