@@ -9,15 +9,29 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import projectormato.ss.entity.Shop
+import projectormato.ss.entity.User
 import projectormato.ss.form.ShopPostForm
 import projectormato.ss.service.ShopInfo
 import projectormato.ss.service.ShopService
+import projectormato.ss.service.UserService
 
 @Controller
-class ShopController(private val shopService: ShopService) {
+class ShopController(
+        private val shopService: ShopService,
+        private val userService: UserService
+) {
 
     @GetMapping(path = ["/"])
     fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
+        // NOTE: userのnameとemailの対応付けを持っておくためにDBに格納しておく
+        if (userService.findById(user.name) == null) {
+            userService.save(
+                    User.builder()
+                            .userId(user.name)
+                            .email(user.attributes["email"]?.toString())
+                            .build()
+            )
+        }
         model.addAttribute("shopList", shopService.findByUserId(user.name))
         model.addAttribute("shopPostForm", ShopPostForm(""))
         return "index"

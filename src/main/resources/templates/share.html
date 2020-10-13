@@ -13,6 +13,14 @@
 
     <div class="row">
         <h2>共有相手を追加</h2>
+        <form th:action="@{/share}" th:object="${shareForm}" method="post">
+            <label for="email">email address</label>
+            <input id="email" type="text" th:field="*{email}"><br>
+
+            <div class="d-flex justify-content-center">
+                <input class="btn btn-primary" type="submit" value="Share">
+            </div>
+        </form>
     </div>
 
     <div class="row">

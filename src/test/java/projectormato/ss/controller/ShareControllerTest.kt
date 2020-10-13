@@ -34,6 +34,6 @@ internal class ShareControllerTest : ControllerTestBase() {
         val url = Objects.requireNonNull(mvcResult.modelAndView).model["url"]
 
         // Then
-        assertEquals(mvcResult.request.requestURL.toString() + "/" + "1", url)
+        assertEquals(mvcResult.request.requestURL.toString() + "/" + userId, url)
     }
 }

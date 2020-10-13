@@ -8,14 +8,15 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import projectormato.ss.entity.Shop
-import projectormato.ss.repository.ChoiceRepository
-import projectormato.ss.repository.ProblemRepository
-import projectormato.ss.repository.QuestionRepository
-import projectormato.ss.repository.ShopRepository
+import projectormato.ss.repository.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
 open class ControllerTestBase {
+    protected val userId = "1"
+    protected val anotherUserId = "2"
+    protected val userEmail = "tomato@example.com"
+
     protected lateinit var mockMvc: MockMvc
 
     // TODO: Autowiredなくしたい by tomato
@@ -24,6 +25,9 @@ open class ControllerTestBase {
 
     @Autowired
     protected lateinit var shopRepository: ShopRepository
+
+    @Autowired
+    protected lateinit var userRepository: UserRepository
 
     @Autowired
     protected lateinit var problemRepository: ProblemRepository
@@ -38,6 +42,7 @@ open class ControllerTestBase {
     fun setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
         shopRepository.deleteAll()
+        userRepository.deleteAll()
         choiceRepository.deleteAll()
         questionRepository.deleteAll()
         problemRepository.deleteAll()

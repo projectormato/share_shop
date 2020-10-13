@@ -35,6 +35,13 @@ CREATE TABLE IF NOT EXISTS shop
 CREATE TABLE IF NOT EXISTS share_shared
   (
      share_shared_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
-     share_id         BIGINT NOT NULL,
-     shared_id        BIGINT NOT NULL
+     share_id         VARCHAR(100) NOT NULL,
+     shared_id        VARCHAR(100) NOT NULL
+  );
+
+CREATE TABLE IF NOT EXISTS `user`
+  (
+     id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+     user_id  VARCHAR(100) NOT NULL,
+     email    VARCHAR(100) NOT NULL
   );

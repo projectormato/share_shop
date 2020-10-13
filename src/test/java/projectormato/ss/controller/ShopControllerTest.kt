@@ -32,12 +32,11 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店一覧ページにアクセスするとお店一覧が返ること_要素1() {
         // Given
-        val shop = createShop("1")
-        shopRepository.saveAll(listOf(shop, createShop("2")))
+        val shop = createShop(userId)
+        shopRepository.saveAll(listOf(shop, createShop(anotherUserId)))
 
         //When
-        val mvcResult = mockMvc.
-                perform(get("/"))
+        val mvcResult = mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(status().isOk)
                 .andReturn()
@@ -61,7 +60,7 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店一覧ページにアクセスするとお店一覧が返ること_要素2() {
         // Given
-        val expectedShopList = listOf(createShop("1"), createShop("1"))
+        val expectedShopList = listOf(createShop(userId), createShop(userId))
         shopRepository.saveAll(expectedShopList)
 
         // When
@@ -105,8 +104,8 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店詳細ページでお店の情報が表示されること() {
         // Given
-        val shop = createShop("1")
-        shopRepository.saveAll(listOf(shop, createShop("2")))
+        val shop = createShop(userId)
+        shopRepository.saveAll(listOf(shop, createShop(anotherUserId)))
 
         //When
         val mvcResult = mockMvc
@@ -129,8 +128,8 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun 他人のお店詳細ページは表示されないこと() {
         // Given
-        val shop = createShop("1")
-        val otherShop = createShop("2")
+        val shop = createShop(userId)
+        val otherShop = createShop(anotherUserId)
         shopRepository.saveAll(listOf(shop, otherShop))
 
         //When
@@ -146,8 +145,8 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店を削除できること() {
         // Given 2件作成
-        val shop = createShop("1")
-        shopRepository.saveAll(listOf(shop, createShop("2")))
+        val shop = createShop(userId)
+        shopRepository.saveAll(listOf(shop, createShop(anotherUserId)))
 
         //When
         mockMvc.perform(delete("/shop/" + shop.id))
@@ -162,8 +161,8 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun 他人のお店は削除できないこと() {
         // Given 2件作成
-        val shop = createShop("1")
-        val otherShop = createShop("2")
+        val shop = createShop(userId)
+        val otherShop = createShop(anotherUserId)
         shopRepository.saveAll(listOf(shop, otherShop))
 
         //When
@@ -174,5 +173,16 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         // Then 2件ある
         assertEquals(2, shopRepository.findAll().size)
+    }
+
+    @Test
+    fun お店一覧ページにアクセスするとユーザー情報が格納されること() {
+        mockMvc.perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk)
+
+        val user = userRepository.findFirstByUserId(userId)
+        assertEquals(userId, user?.userId)
+        assertEquals(userEmail, user?.email)
     }
 }

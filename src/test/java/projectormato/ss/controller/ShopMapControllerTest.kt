@@ -28,7 +28,7 @@ internal class ShopMapControllerTest() : ControllerTestBase() {
     @Test
     fun お店MAPページにアクセスするとお店情報と座標情報が返ること() {
         // Given
-        val expectedShopList = listOf(createShop("1"), createShop("1"))
+        val expectedShopList = listOf(createShop(userId), createShop(userId))
         shopRepository.saveAll(expectedShopList)
 
         // When
