@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import projectormato.ss.entity.Shop
+import projectormato.ss.entity.User
 import projectormato.ss.repository.*
 
 @SpringBootTest
@@ -16,6 +17,7 @@ open class ControllerTestBase {
     protected val userId = "1"
     protected val anotherUserId = "2"
     protected val userEmail = "tomato@example.com"
+    protected val anotherUserEmail = "tomato2@example.com"
 
     protected lateinit var mockMvc: MockMvc
 
@@ -28,6 +30,9 @@ open class ControllerTestBase {
 
     @Autowired
     protected lateinit var userRepository: UserRepository
+
+    @Autowired
+    protected lateinit var shareRepository: ShareRepository
 
     @Autowired
     protected lateinit var problemRepository: ProblemRepository
@@ -43,12 +48,14 @@ open class ControllerTestBase {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
         shopRepository.deleteAll()
         userRepository.deleteAll()
+        shareRepository.deleteAll()
         choiceRepository.deleteAll()
         questionRepository.deleteAll()
         problemRepository.deleteAll()
     }
 
-    protected fun createShop(userId: String) = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
+    protected fun createShop(userId: String): Shop = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
 
+    protected fun createUser(userId: String, email: String): User = User.builder().userId(userId).email(email).build()
 
 }

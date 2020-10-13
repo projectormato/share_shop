@@ -7,4 +7,8 @@ import projectormato.ss.entity.User
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
     fun findFirstByUserId(userId: String): User?
+
+    fun findFirstByEmail(email: String): User?
+
+    fun findByUserIdIn(userIdList: List<String>): List<User>
 }

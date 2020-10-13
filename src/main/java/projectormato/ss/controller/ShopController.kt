@@ -24,7 +24,7 @@ class ShopController(
     @GetMapping(path = ["/"])
     fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
         // NOTE: userのnameとemailの対応付けを持っておくためにDBに格納しておく
-        if (userService.findById(user.name) == null) {
+        if (userService.findByUserId(user.name) == null) {
             userService.save(
                     User.builder()
                             .userId(user.name)

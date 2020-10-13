@@ -6,7 +6,10 @@ import projectormato.ss.repository.UserRepository
 
 @Service
 class UserService(private val userRepository: UserRepository) {
-    fun findById(id: String): User? = userRepository.findFirstByUserId(id)
-    fun save(user: User) = userRepository.save(user)
+    fun findByUserId(id: String): User? = userRepository.findFirstByUserId(id)
+
+    fun save(user: User): User = userRepository.save(user)
+    fun findByEmail(email: String): User? = userRepository.findFirstByEmail(email)
+    fun findByUserIds(userList: List<String>): List<User> = userRepository.findByUserIdIn(userList)
 }
 
