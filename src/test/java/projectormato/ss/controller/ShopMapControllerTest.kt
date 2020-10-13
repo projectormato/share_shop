@@ -57,6 +57,7 @@ internal class ShopMapControllerTest() : ControllerTestBase() {
             assertEquals(2, locationList.size)
             locationList.forEach {
                 if (it is LatLng?) {
+                    // NOTE: doubleで比べると値が変わったりするのでintで比較する
                     assertEquals(35, it?.lat?.toInt())
                     assertEquals(139, it?.lng?.toInt())
                 }

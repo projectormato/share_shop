@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import projectormato.ss.entity.Shop
 import java.util.*
 
 @SpringBootTest
@@ -21,5 +22,18 @@ internal class ShareControllerTest : ControllerTestBase() {
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andReturn()
         assertEquals("share", Objects.requireNonNull(mvcResult.modelAndView).viewName)
+    }
+
+    @Test
+    fun お店共有ページにアクセスすると自分の共有用URLが返ること() {
+        val mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders.get("/share"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andReturn()
+        val url = Objects.requireNonNull(mvcResult.modelAndView).model["url"]
+
+        // Then
+        assertEquals(mvcResult.request.requestURL.toString() + "/" + "1", url)
     }
 }
