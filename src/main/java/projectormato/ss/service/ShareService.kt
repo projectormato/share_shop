@@ -7,6 +7,9 @@ import projectormato.ss.repository.ShareRepository
 @Service
 class ShareService(private val shareRepository: ShareRepository) {
     fun save(share: Share): Share = shareRepository.save(share)
-    fun findByUserId(userId: String): List<Share> = shareRepository.findByShareId(userId)
+
+    fun findByShareId(shareId: String): List<Share> = shareRepository.findByShareId(shareId)
+
+    fun findByShareId(shareId: String, sharedId: String): Share? = shareRepository.findByShareIdAndSharedId(shareId, sharedId)
 }
 

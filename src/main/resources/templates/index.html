@@ -8,9 +8,9 @@
 <div class="container" layout:fragment="content">
     <div class="row">
         <div class="col">
-            <h2>お店一覧</h2>
+            <h2 th:text="${shareUserId} ? '共有されたお店一覧' : 'お店一覧'"></h2>
             <div th:each="shop : ${shopList}" class="container card mb-3 py-3">
-                <a th:href="'shop/' + ${shop.getId()}">
+                <a th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/' + ${shop.getId()} : '/shop/' + ${shop.getId()}">
                     <div class="row d-flex justify-content-center">
                         <h3 th:text="${shop.getName()}"></h3>
                     </div>
@@ -23,7 +23,7 @@
 
         <div class="col">
             <h2>お店をシェア</h2>
-            <form th:action="@{/shop}" th:object="${shopPostForm}" method="post">
+            <form th:action="${shareUserId} ? '/share/' + ${shareUserId} + '/shop' : '/shop'" th:object="${shopPostForm}" method="post">
                 <label for="title">URL:</label>
                 <input id="title" type="text" th:field="*{url}"><br>
 
@@ -32,12 +32,12 @@
                 </div>
             </form>
 
-            <a th:href="@{/maps}">
+            <a th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/maps' : '/maps'">
                 MAPで見る
             </a><br>
 
             <a th:href="@{/share}">
-                お店をshareする
+                自分のお店をshareする
             </a>
         </div>
     </div>

@@ -13,7 +13,7 @@
     <div th:text="${shop.getAddress()}" class="row"></div>
     <div th:text="${shop.getHours()}" class="row"></div>
     <div class="row">
-        <form th:action="@{/shop/{id}(id=${shop.getId()})}" th:method="delete">
+        <form th:if="${!isAnotherUser}" th:action="@{/shop/{id}(id=${shop.getId()})}" th:method="delete">
             <input class="btn btn-danger" type="submit" value="このお店を削除する">
         </form>
     </div>

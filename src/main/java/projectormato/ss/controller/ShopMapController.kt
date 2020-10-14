@@ -15,7 +15,7 @@ import projectormato.ss.service.ShopService
 class ShopMapController(private val shopService: ShopService) {
 
     @GetMapping(path = ["/maps"])
-    fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
+    fun shopMap(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
         val shopList = shopService.findByUserId(user.name)
         val locationList = this.shopService.getLocationList(shopList)
 

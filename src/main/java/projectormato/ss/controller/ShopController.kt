@@ -55,7 +55,7 @@ class ShopController(
     }
 
     @PostMapping(path = ["/shop"])
-    fun createProblem(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm): String {
+    fun postShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm): String {
         if (!form.url.startsWith("https://tabelog.com/")) {
             return "redirect:/"
         }
