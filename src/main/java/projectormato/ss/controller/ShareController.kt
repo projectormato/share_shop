@@ -22,7 +22,7 @@ class ShareController(
         private val userService: UserService,
         private val shareService: ShareService,
         private val shopService: ShopService
-        ) {
+) {
 
     @GetMapping(path = ["/share"])
     fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
@@ -71,7 +71,6 @@ class ShareController(
             "redirect:/"
         }
     }
-
 
     @GetMapping(path = ["/share/{userId}/maps"])
     fun anotherUserShopMap(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String): String {

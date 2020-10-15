@@ -42,6 +42,7 @@ class ShopController(
         val shop = shopService.findByIdAndUserId(id, user.name)
         return if (shop != null) {
             model.addAttribute("shop", shop)
+            model.addAttribute("isAnotherUser", false)
             "detail"
         } else {
             "redirect:/"

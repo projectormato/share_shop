@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import projectormato.ss.entity.Share
 import projectormato.ss.entity.Shop
 import projectormato.ss.entity.User
 import projectormato.ss.repository.*
@@ -58,4 +59,5 @@ open class ControllerTestBase {
 
     protected fun createUser(userId: String, email: String): User = User.builder().userId(userId).email(email).build()
 
+    protected fun createShare(shareId: String, sharedId: String): Share = Share.builder().shareId(shareId).sharedId(sharedId).build()
 }
