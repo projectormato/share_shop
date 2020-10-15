@@ -24,6 +24,4 @@ spring:
             client-secret: ${OAUTH_CLIENT_SECRET}
 
 ss:
-  security:
-    useHttps: false
   geocoding: ${GEOCODING_API_KEY:""}

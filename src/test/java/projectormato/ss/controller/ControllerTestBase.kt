@@ -35,24 +35,12 @@ open class ControllerTestBase {
     @Autowired
     protected lateinit var shareRepository: ShareRepository
 
-    @Autowired
-    protected lateinit var problemRepository: ProblemRepository
-
-    @Autowired
-    protected lateinit var questionRepository: QuestionRepository
-
-    @Autowired
-    protected lateinit var choiceRepository: ChoiceRepository
-
     @BeforeEach
     fun setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
         shopRepository.deleteAll()
         userRepository.deleteAll()
         shareRepository.deleteAll()
-        choiceRepository.deleteAll()
-        questionRepository.deleteAll()
-        problemRepository.deleteAll()
     }
 
     protected fun createShop(userId: String): Shop = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
