@@ -10,6 +10,8 @@ class ShareService(private val shareRepository: ShareRepository) {
 
     fun findByShareId(shareId: String): List<Share> = shareRepository.findByShareId(shareId)
 
-    fun findByShareId(shareId: String, sharedId: String): Share? = shareRepository.findByShareIdAndSharedId(shareId, sharedId)
+    fun findBySharedId(sharedId: String): List<Share> = shareRepository.findBySharedId(sharedId)
+
+    fun findByShareIdAndSharedId(shareId: String, sharedId: String): Share? = shareRepository.findByShareIdAndSharedId(shareId, sharedId)
 }
 

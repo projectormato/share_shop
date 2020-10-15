@@ -8,5 +8,7 @@ import projectormato.ss.entity.Share
 interface ShareRepository : JpaRepository<Share, Long> {
     fun findByShareId(shareId: String): List<Share>
 
+    fun findBySharedId(sharedId: String): List<Share>
+
     fun findByShareIdAndSharedId(shareId: String, sharedId: String): Share?
 }

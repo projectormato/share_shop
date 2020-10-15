@@ -16,7 +16,6 @@ import projectormato.ss.service.ShopInfo
 import projectormato.ss.service.ShopService
 import projectormato.ss.service.UserService
 import javax.servlet.http.HttpServletRequest
-
 @Controller
 class ShareController(
         private val userService: UserService,
@@ -25,9 +24,9 @@ class ShareController(
 ) {
 
     @GetMapping(path = ["/share"])
-    fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
+    fun shareShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
         model.addAttribute("url", request.requestURL.toString() + "/" + user.name)
-        model.addAttribute("sharedEmailList", userService.findByUserIds(shareService.findByShareId(user.name).map { it.sharedId }).map { it.email })
+        model.addAttribute("shareEmailList", userService.findByUserIds(shareService.findByShareId(user.name).map { it.sharedId }).map { it.email })
         model.addAttribute("shareForm", ShareForm(""))
         return "share"
     }
@@ -47,7 +46,7 @@ class ShareController(
 
     @GetMapping(path = ["/share/{userId}"])
     fun anotherUserShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String): String {
-        if (shareService.findByShareId(userId, user.name) == null) {
+        if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/"
         }
         model.addAttribute("shopList", shopService.findByUserId(userId))
@@ -58,7 +57,7 @@ class ShareController(
 
     @GetMapping(path = ["/share/{userId}/{id}"])
     fun anotherUserShopDetail(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String, @PathVariable id: Long): String {
-        if (shareService.findByShareId(userId, user.name) == null) {
+        if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/"
         }
 
@@ -74,7 +73,7 @@ class ShareController(
 
     @GetMapping(path = ["/share/{userId}/maps"])
     fun anotherUserShopMap(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String): String {
-        if (shareService.findByShareId(userId, user.name) == null) {
+        if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/"
         }
         val shopList = shopService.findByUserId(userId)
@@ -87,7 +86,7 @@ class ShareController(
 
     @PostMapping(path = ["/share/{userId}/shop"])
     fun anotherUserPostShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm, @PathVariable userId: String): String {
-        if (shareService.findByShareId(userId, user.name) == null) {
+        if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/"
         }
         if (!form.url.startsWith("https://tabelog.com/")) {
@@ -105,4 +104,21 @@ class ShareController(
         )
         return "redirect:/share/$userId"
     }
+
+    @GetMapping(path = ["/shared"])
+    fun sharedShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
+        val shareList = shareService.findBySharedId(user.name)
+        model.addAttribute("sharedUrlList", shareList.map { getShareUrl(request, it) })
+        model.addAttribute("sharedEmailList", userService.findByUserIds(shareList.map { it.shareId }).map { it.email })
+        return "shared"
+    }
+
+    private fun getShareUrl(request: HttpServletRequest, it: Share): String {
+        var domain = request.scheme + "://" + request.serverName
+        if (request.serverPort != 80 && request.serverPort != 443) {
+            domain += ":" + request.serverPort
+        }
+        return domain + "/share/" + it.shareId
+    }
 }
+

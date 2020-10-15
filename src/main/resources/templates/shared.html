@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>お店を共有</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <h2>共有されているリスト</h2>
+        <div th:each="email : ${sharedEmailList}" class="container card mb-3 py-3">
+            <div th:text="${email}" class="row d-flex justify-content-center"></div>
+        </div>
+        <div th:each="url : ${sharedUrlList}" class="container card mb-3 py-3">
+            <div th:text="${url}" class="row d-flex justify-content-center"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -23,6 +23,7 @@ internal class ShareControllerTest : ControllerTestBase() {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andReturn()
+
         assertEquals("share", Objects.requireNonNull(mvcResult.modelAndView).viewName)
     }
 
@@ -35,7 +36,6 @@ internal class ShareControllerTest : ControllerTestBase() {
                 .andReturn()
         val url = Objects.requireNonNull(mvcResult.modelAndView).model["url"]
 
-        // Then
         assertEquals(mvcResult.request.requestURL.toString() + "/" + userId, url)
     }
 
@@ -49,9 +49,8 @@ internal class ShareControllerTest : ControllerTestBase() {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andReturn()
-        val sharedEmailList = Objects.requireNonNull(mvcResult.modelAndView).model["sharedEmailList"]
+        val sharedEmailList = Objects.requireNonNull(mvcResult.modelAndView).model["shareEmailList"]
 
-        // Then
         if (sharedEmailList is List<*>) {
             assertEquals(anotherUserEmail, sharedEmailList[0])
         }
@@ -124,7 +123,6 @@ internal class ShareControllerTest : ControllerTestBase() {
                 }
             }
         }
-
     }
 
     @Test
@@ -169,8 +167,31 @@ internal class ShareControllerTest : ControllerTestBase() {
         assertEquals("ステーキガスト 落合南長崎店", shopList[0].name)
         assertEquals("東京都豊島区南長崎4-5-20 iTerrace落合南長崎 2F 大きな地図を見る 周辺のお店を探す", shopList[0].address)
         assertEquals("営業時間 [月～金] 11:00～24:00 [土・日・祝] 10:00～24:00 日曜営業 定休日 年中無休 ", shopList[0].hours)
+    }
 
+    @Test
+    fun 自分が誰にリストを共有してもらっているか確認できること() {
+        setUpShare()
 
+        val mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders.get("/shared"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andReturn()
+        val sharedUrlList = Objects.requireNonNull(mvcResult.modelAndView).model["sharedUrlList"]
+        val sharedEmailList = Objects.requireNonNull(mvcResult.modelAndView).model["sharedEmailList"]
+
+        if (sharedUrlList is List<*>) {
+            if (sharedUrlList[0] is String) {
+                assertEquals("http://localhost/share/$anotherUserId", sharedUrlList[0])
+            }
+        }
+
+        if (sharedEmailList is List<*>) {
+            if (sharedEmailList[0] is String) {
+                assertEquals(anotherUserEmail, sharedEmailList[0])
+            }
+        }
     }
 
     private fun setUpShare(): List<Shop> {
