@@ -11,4 +11,6 @@ interface ShareRepository : JpaRepository<Share, Long> {
     fun findBySharedId(sharedId: String): List<Share>
 
     fun findByShareIdAndSharedId(shareId: String, sharedId: String): Share?
+
+    fun findByIdAndShareId(id: Long, shareId: String): Share?
 }

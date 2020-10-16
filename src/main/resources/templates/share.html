@@ -25,8 +25,11 @@
 
     <div class="row">
         <h2>共有中のユーザ</h2>
-        <div th:each="email : ${shareEmailList}" class="container card mb-3 py-3">
-            <div th:text="${email}" class="row d-flex justify-content-center"></div>
+        <div th:each="entry : ${shareEmailMap}" class="container card mb-3 py-3">
+            <div th:text="${entry.value}" class="row d-flex justify-content-center"></div>
+            <form th:action="@{/share/{id}(id=${entry.key})}" th:method="delete">
+                <input class="btn btn-danger" type="submit" value="削除する">
+            </form>
         </div>
     </div>
 </div>

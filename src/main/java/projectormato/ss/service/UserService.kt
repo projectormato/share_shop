@@ -10,6 +10,6 @@ class UserService(private val userRepository: UserRepository) {
 
     fun save(user: User): User = userRepository.save(user)
     fun findByEmail(email: String): User? = userRepository.findFirstByEmail(email)
-    fun findByUserIds(userList: List<String>): List<User> = userRepository.findByUserIdIn(userList)
+    fun findByUserIds(userIdList: List<String>): List<User> = userRepository.findByUserIdIn(userIdList)
 }
 

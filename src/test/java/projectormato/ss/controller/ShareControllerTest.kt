@@ -3,11 +3,14 @@ package projectormato.ss.controller
 import com.google.maps.model.LatLng
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import projectormato.ss.entity.Shop
 import projectormato.ss.oauth2.WithMockOAuth2User
@@ -42,17 +45,20 @@ internal class ShareControllerTest : ControllerTestBase() {
     @Test
     fun お店共有ページにアクセスすると共有中のemailリストが返ること() {
         userRepository.save(createUser(anotherUserId, anotherUserEmail))
-        shareRepository.save(createShare(userId, anotherUserId))
+        val share = createShare(userId, anotherUserId)
+        shareRepository.save(share)
 
         val mvcResult = mockMvc
                 .perform(get("/share"))
                 .andDo(print())
                 .andExpect(status().isOk)
                 .andReturn()
-        val sharedEmailList = mvcResult.modelAndView!!.model["shareEmailList"]
+        val shareEmailMap = mvcResult.modelAndView!!.model["shareEmailMap"]
 
-        if (sharedEmailList is List<*>) {
-            assertEquals(anotherUserEmail, sharedEmailList[0])
+        if (shareEmailMap is Map<*, *>) {
+            assertEquals(anotherUserEmail, shareEmailMap[share.id])
+        } else {
+            fail("shareEmailMap が想定した型と異なっています")
         }
     }
 
@@ -70,6 +76,21 @@ internal class ShareControllerTest : ControllerTestBase() {
 
         assertEquals(userId, sharedList[0].shareId)
         assertEquals(anotherUserId, sharedList[0].sharedId)
+    }
+
+    @Test
+    fun shareした情報を削除できること() {
+        // Given userIdからanotherUserId にshare
+        val share = shareRepository.save(createShare(userId, anotherUserId))
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.delete("/share/" + share.id))
+                .andDo(print())
+                .andExpect(status().isFound)
+                .andExpect(MockMvcResultMatchers.header().string("Location", "/share"))
+
+        // Then
+        assertEquals(0, shareRepository.findAll().size)
     }
 
     @Test

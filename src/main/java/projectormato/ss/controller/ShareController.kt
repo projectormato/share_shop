@@ -4,6 +4,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -25,8 +26,12 @@ class ShareController(
 
     @GetMapping(path = ["/share"])
     fun shareShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
+        val shareList = shareService.findByShareId(user.name)
+        val emailList = userService.findByUserIds(shareList.map { it.sharedId }).map { it.email }
+        val shareEmailMap = shareService.findByShareId(user.name).map { it.id }.zip(emailList).toMap()
+
         model.addAttribute("url", request.requestURL.toString() + "/" + user.name)
-        model.addAttribute("shareEmailList", userService.findByUserIds(shareService.findByShareId(user.name).map { it.sharedId }).map { it.email })
+        model.addAttribute("shareEmailMap", shareEmailMap)
         model.addAttribute("shareForm", ShareForm(""))
         return "share"
     }
@@ -41,6 +46,12 @@ class ShareController(
                         .sharedId(sharedUser.userId)
                         .build()
         )
+        return "redirect:/share"
+    }
+
+    @DeleteMapping(path = ["/share/{id}"])
+    fun deleteShare(@AuthenticationPrincipal user: OAuth2User, @PathVariable id: Long): String {
+        shareService.deleteByIdAndShareId(id, user.name)
         return "redirect:/share"
     }
 
