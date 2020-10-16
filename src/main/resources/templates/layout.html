@@ -13,6 +13,12 @@
     <a class="navbar-brand text-white ml-5" th:href="@{/}">
         <div class="layout_nav h1">Share Shop</div>
     </a>
+
+    <form th:action="@{/logout}" method="post">
+        <div class="d-flex justify-content-center">
+            <input class="btn btn-primary" type="submit" value="Logout">
+        </div>
+    </form>
 </nav>
 <div layout:fragment="content"></div>
 
