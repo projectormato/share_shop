@@ -1,15 +1,14 @@
 package projectormato.ss.controller
 
-import WithMockOAuth2User
 import com.google.maps.model.LatLng
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import projectormato.ss.entity.Shop
-import java.util.*
+import projectormato.ss.oauth2.WithMockOAuth2User
 
 @SpringBootTest
 @WithMockOAuth2User
@@ -18,11 +17,11 @@ internal class ShopMapControllerTest() : ControllerTestBase() {
     @Test
     fun お店MAPページにアクセスするとレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
-                .perform(MockMvcRequestBuilders.get("/maps"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk)
+                .perform(get("/maps"))
+                .andDo(print())
+                .andExpect(status().isOk)
                 .andReturn()
-        assertEquals("maps", Objects.requireNonNull(mvcResult.modelAndView).viewName)
+        assertEquals("maps", mvcResult.modelAndView?.viewName)
     }
 
     @Test
@@ -33,12 +32,12 @@ internal class ShopMapControllerTest() : ControllerTestBase() {
 
         // When
         val mvcResult = mockMvc
-                .perform(MockMvcRequestBuilders.get("/maps"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk)
+                .perform(get("/maps"))
+                .andDo(print())
+                .andExpect(status().isOk)
                 .andReturn()
-        val shopList = Objects.requireNonNull(mvcResult.modelAndView).model["shopList"]
-        val locationList = Objects.requireNonNull(mvcResult.modelAndView).model["locationList"]
+        val shopList = mvcResult.modelAndView!!.model["shopList"]
+        val locationList = mvcResult.modelAndView!!.model["locationList"]
 
         // Then
         if (shopList is List<*>) {

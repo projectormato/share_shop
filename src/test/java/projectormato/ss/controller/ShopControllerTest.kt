@@ -1,6 +1,5 @@
 package projectormato.ss.controller
 
-import WithMockOAuth2User
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -12,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import projectormato.ss.entity.Shop
-import java.util.*
+import projectormato.ss.oauth2.WithMockOAuth2User
 
 @SpringBootTest
 @WithMockOAuth2User
@@ -25,7 +24,7 @@ internal class ShopControllerTest : ControllerTestBase() {
                 .andDo(print())
                 .andExpect(status().isOk)
                 .andReturn()
-        assertEquals("index", Objects.requireNonNull(mvcResult.modelAndView).viewName)
+        assertEquals("index", mvcResult.modelAndView?.viewName)
     }
 
     @Test
@@ -39,10 +38,10 @@ internal class ShopControllerTest : ControllerTestBase() {
                 .andDo(print())
                 .andExpect(status().isOk)
                 .andReturn()
-        val shopList = Objects.requireNonNull(mvcResult.modelAndView).model["shopList"]
+        val shopList = mvcResult.modelAndView!!.model["shopList"]
 
         // Then
-        assertEquals("index", Objects.requireNonNull(mvcResult.modelAndView).viewName)
+        assertEquals("index", mvcResult.modelAndView?.viewName)
         if (shopList is List<*>) {
             assertEquals(1, shopList.size)
             shopList.forEach {
@@ -68,7 +67,7 @@ internal class ShopControllerTest : ControllerTestBase() {
                 .andDo(print())
                 .andExpect(status().isOk)
                 .andReturn()
-        val shopList = Objects.requireNonNull(mvcResult.modelAndView).model["shopList"]
+        val shopList = mvcResult.modelAndView!!.model["shopList"]
 
         // Then
         if (shopList is List<*>) {
@@ -112,10 +111,10 @@ internal class ShopControllerTest : ControllerTestBase() {
                 .andDo(print())
                 .andExpect(status().isOk)
                 .andReturn()
-        val actualShop = Objects.requireNonNull(mvcResult.modelAndView).model["shop"]
+        val actualShop = mvcResult.modelAndView!!.model["shop"]
 
         // Then
-        assertEquals("detail", Objects.requireNonNull(mvcResult.modelAndView).viewName)
+        assertEquals("detail", mvcResult.modelAndView?.viewName)
         if (actualShop is Shop) {
             assertEquals(shop.name, actualShop.name)
             assertEquals(shop.address, actualShop.address)
@@ -138,7 +137,7 @@ internal class ShopControllerTest : ControllerTestBase() {
                 .andReturn()
 
         // Then
-        assertEquals("redirect:/", Objects.requireNonNull(mvcResult.modelAndView).viewName)
+        assertEquals("redirect:/", mvcResult.modelAndView?.viewName)
     }
 
     @Test
