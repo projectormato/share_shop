@@ -28,7 +28,7 @@ class ShareController(
     fun shareShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
         val shareList = shareService.findByShareId(user.name)
         val emailList = userService.findByUserIds(shareList.map { it.sharedId }).map { it.email }
-        val shareEmailMap = shareService.findByShareId(user.name).map { it.id }.zip(emailList).toMap()
+        val shareEmailMap = shareList.map { it.id }.zip(emailList).toMap()
 
         model.addAttribute("url", request.requestURL.toString() + "/" + user.name)
         model.addAttribute("shareEmailMap", shareEmailMap)
@@ -53,6 +53,12 @@ class ShareController(
     fun deleteShare(@AuthenticationPrincipal user: OAuth2User, @PathVariable id: Long): String {
         shareService.deleteByIdAndShareId(id, user.name)
         return "redirect:/share"
+    }
+
+    @DeleteMapping(path = ["/shared/{id}"])
+    fun deleteShared(@AuthenticationPrincipal user: OAuth2User, @PathVariable id: Long): String {
+        shareService.deleteByIdAndSharedId(id, user.name)
+        return "redirect:/shared"
     }
 
     @GetMapping(path = ["/share/{userId}"])
@@ -118,9 +124,10 @@ class ShareController(
 
     @GetMapping(path = ["/shared"])
     fun sharedShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
-        val shareList = shareService.findBySharedId(user.name)
-        model.addAttribute("sharedUrlList", shareList.map { getShareUrl(request, it) })
-        model.addAttribute("sharedEmailList", userService.findByUserIds(shareList.map { it.shareId }).map { it.email })
+        val sharedList = shareService.findBySharedId(user.name)
+        model.addAttribute("sharedList", sharedList)
+        model.addAttribute("sharedUrlList", sharedList.map { getShareUrl(request, it) })
+        model.addAttribute("sharedEmailList", userService.findByUserIds(sharedList.map { it.shareId }).map { it.email })
         return "shared"
     }
 

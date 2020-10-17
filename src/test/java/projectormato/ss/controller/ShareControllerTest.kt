@@ -94,6 +94,21 @@ internal class ShareControllerTest : ControllerTestBase() {
     }
 
     @Test
+    fun shareされた情報を削除できること() {
+        // Given anotherUserIdからuserId にshare
+        val share = shareRepository.save(createShare(anotherUserId, userId))
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.delete("/shared/" + share.id))
+                .andDo(print())
+                .andExpect(status().isFound)
+                .andExpect(MockMvcResultMatchers.header().string("Location", "/shared"))
+
+        // Then
+        assertEquals(0, shareRepository.findAll().size)
+    }
+
+    @Test
     fun お店をshareしてくれているユーザのお店一覧が見れること() {
         // Given
         val expectedShopList = setUpShare()

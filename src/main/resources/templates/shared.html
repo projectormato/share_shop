@@ -14,6 +14,12 @@
         <div th:each="url : ${sharedUrlList}" class="container card mb-3 py-3">
             <div th:text="${url}" class="row d-flex justify-content-center"></div>
         </div>
+
+        <div th:each="shared : ${sharedList}" class="container card mb-3 py-3">
+            <form th:action="@{/shared/{id}(id=${shared.getId()})}" th:method="delete">
+                <input class="btn btn-danger" type="submit" value="削除する">
+            </form>
+        </div>
     </div>
 </div>
 </body>

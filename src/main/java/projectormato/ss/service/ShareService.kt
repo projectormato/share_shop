@@ -14,13 +14,22 @@ class ShareService(private val shareRepository: ShareRepository) {
 
     fun findByShareIdAndSharedId(shareId: String, sharedId: String): Share? = shareRepository.findByShareIdAndSharedId(shareId, sharedId)
 
-    private fun findByIdAndShareId(id: Long, shareId: String): Share? = shareRepository.findByIdAndShareId(id, shareId)
-
     fun deleteByIdAndShareId(id: Long, shareId: String) {
         val share = this.findByIdAndShareId(id, shareId)
         if (share != null) {
             shareRepository.delete(share)
         }
     }
+
+    fun deleteByIdAndSharedId(id: Long, sharedId: String) {
+        val share = this.findByIdAndSharedId(id, sharedId)
+        if (share != null) {
+            shareRepository.delete(share)
+        }
+    }
+
+    private fun findByIdAndShareId(id: Long, shareId: String): Share? = shareRepository.findByIdAndShareId(id, shareId)
+
+    private fun findByIdAndSharedId(id: Long, sharedId: String): Share? = shareRepository.findByIdAndSharedId(id, sharedId)
 }
 
