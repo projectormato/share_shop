@@ -63,8 +63,7 @@ internal class ShareControllerTest : ControllerTestBase() {
     }
 
     @Test
-    fun お店をshareするとshared情報が入ること() {
-        // Given
+    fun お店をshareするとshare情報が入ること() {
         userRepository.save(createUser(anotherUserId, anotherUserEmail))
 
         mockMvc.perform(post("/share")
@@ -76,6 +75,20 @@ internal class ShareControllerTest : ControllerTestBase() {
 
         assertEquals(userId, sharedList[0].shareId)
         assertEquals(anotherUserId, sharedList[0].sharedId)
+    }
+
+    @Test
+    fun 自分自身とshareできないこと() {
+        userRepository.save(createUser(userId, userEmail))
+
+        mockMvc.perform(post("/share")
+                .param("email", userEmail)
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andDo(print())
+                .andExpect(status().isFound)
+                .andExpect(MockMvcResultMatchers.header().string("Location", "/share"))
+
+        assertEquals(0, shareRepository.findAll().size)
     }
 
     @Test

@@ -38,6 +38,12 @@ class ShareController(
 
     @PostMapping(path = ["/share"])
     fun shareShop(@AuthenticationPrincipal user: OAuth2User, form: ShareForm): String {
+        if (user.attributes["email"] == form.email) {
+            return "redirect:/share"
+        }
+        if (shareService.findByShareId(user.name).size >= 100) {
+            return "redirect:/share"
+        }
         // NOTE: ユーザ情報が登録されていないemailの場合特に何も返さない(ユーザが登録しているか分からないようにするため)
         val sharedUser = userService.findByEmail(form.email) ?: return "redirect:/share"
         shareService.save(

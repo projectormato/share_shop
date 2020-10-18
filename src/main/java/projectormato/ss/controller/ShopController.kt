@@ -50,7 +50,7 @@ class ShopController(
     }
 
     @DeleteMapping(path = ["/shop/{id}"])
-    fun deleteShop(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable id: Long): String {
+    fun deleteShop(@AuthenticationPrincipal user: OAuth2User, @PathVariable id: Long): String {
         shopService.deleteById(id, user.name)
         return "redirect:/"
     }
@@ -58,6 +58,9 @@ class ShopController(
     @PostMapping(path = ["/shop"])
     fun postShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm): String {
         if (!form.url.startsWith("https://tabelog.com/")) {
+            return "redirect:/"
+        }
+        if (this.shopService.findByUserId(user.name).size >= 50) {
             return "redirect:/"
         }
         val shopInfo: ShopInfo = shopService.scrapingPage(form.url)
