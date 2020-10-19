@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="https://www.thymeleaf.org"
-      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Share Shop</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet"
+          href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+          integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <link rel="stylesheet" media="all" th:href="@{/css/style.css}"/>
 </head>
 <body class="facebook_bg">
-<nav class="navbar facebook_color mb-4">
+<nav class="navbar red_color mb-4">
     <a class="navbar-brand text-white ml-5" th:href="@{/}">
         <div class="layout_nav h1">Share Shop</div>
     </a>
 
-    <form th:action="@{/logout}" method="post">
-        <div class="d-flex justify-content-center">
-            <input class="btn btn-primary" type="submit" value="Logout">
-        </div>
-    </form>
+    <div class="d-flex" sec:authorize="isAuthenticated()">
+        <a class="btn btn-link" th:href="@{/shared}" role="button">共有されたリストを確認する</a>
+        <a class="btn btn-link" th:href="@{/share}" role="button">自分のお店リストをshareする</a>
+        <form th:action="@{/logout}" method="post">
+            <input class="btn btn-link" type="submit" value="ログアウト">
+        </form>
+    </div>
 </nav>
 <div layout:fragment="content"></div>
 
 <footer class="page-footer font-small blue">
     <div class="footer-copyright text-center py-3">
-        ttdd © 2020
+        Share Shop © 2020
     </div>
 </footer>
 
