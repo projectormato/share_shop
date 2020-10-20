@@ -6,18 +6,14 @@
 </head>
 <body>
 <div class="container" layout:fragment="content">
-    <div class="row">
-        <h2>共有されているリスト</h2>
-        <div th:each="email : ${sharedEmailList}" class="container card mb-3 py-3">
-            <div th:text="${email}" class="row d-flex justify-content-center"></div>
-        </div>
-        <div th:each="url : ${sharedUrlList}" class="container card mb-3 py-3">
-            <div th:text="${url}" class="row d-flex justify-content-center"></div>
-        </div>
-
-        <div th:each="shared : ${sharedList}" class="container card mb-3 py-3">
-            <form th:action="@{/shared/{id}(id=${shared.getId()})}" th:method="delete">
-                <input class="btn btn-danger" type="submit" value="削除する">
+    <div class="h2 m-3">共有されているリスト</div>
+    <div th:each="email,iter : ${sharedEmailList}" class="container card mb-3 py-3">
+        <div class="row">
+            <div th:text="${email}" class="col d-flex align-items-center"></div>
+            <div th:text="${sharedUrlList.get(iter.index)}" class="col-5 d-flex align-items-center"></div>
+            <form th:action="@{/shared/{id}(id=${sharedList.get(iter.index).getId()})}" th:method="delete"
+                  class="col d-flex align-items-center mb-0">
+                <input class="btn btn-outline-warning" type="submit" value="Delete">
             </form>
         </div>
     </div>
