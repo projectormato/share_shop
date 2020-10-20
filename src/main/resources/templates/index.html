@@ -2,40 +2,45 @@
 <html lang="ja" prefix="og: http://ogp.me/ns#" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>お店一覧</title>
+    <title th:text="${shareUserId} ? '共有されたお店一覧' : 'お店一覧'"></title>
 </head>
 <body>
 <div class="container" layout:fragment="content">
-    <div class="row">
-        <div class="col">
-            <h2 th:text="${shareUserId} ? '共有されたお店一覧' : 'お店一覧'"></h2>
-            <div th:each="shop : ${shopList}" class="container card mb-3 py-3">
-                <a th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/' + ${shop.getId()} : '/shop/' + ${shop.getId()}">
-                    <div class="row d-flex justify-content-center">
-                        <h3 th:text="${shop.getName()}"></h3>
-                    </div>
-                    <div th:text="${shop.getUrl()}" class="row d-flex justify-content-center"></div>
-                    <div th:text="${shop.getAddress()}" class="row d-flex justify-content-center"></div>
-                    <div th:text="${shop.getHours()}" class="row d-flex justify-content-center"></div>
-                </a>
+    <div class="row mb-5">
+        <div class="col p-3 mb-2 bg-light d-flex justify-content-center">
+            <a href="#" class="text-dark">
+                Listで見る
+            </a>
+        </div>
+        <div class="col p-3 mb-2 d-flex justify-content-center">
+            <a class="text-dark" th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/maps' : '/maps'">
+                MAPで見る
+            </a>
+        </div>
+    </div>
+
+    <form th:action="${shareUserId} ? '/share/' + ${shareUserId} + '/shop' : '/shop'" th:object="${shopPostForm}"
+          method="post">
+        <div class="row">
+            <div class="form-group col">
+                <label for="url">URL:</label>
+                <input type="text" class="form-control" id="url" placeholder="URL" th:field="*{url}">
+                <small id="urlHelp" class="form-text text-muted">現在食べログのURLのみ有効です</small>
+            </div>
+
+            <div class="col mt-4">
+                <button type="submit" class="btn btn-outline-warning">Share</button>
             </div>
         </div>
+    </form>
 
-        <div class="col">
-            <h2>お店をシェア</h2>
-            <form th:action="${shareUserId} ? '/share/' + ${shareUserId} + '/shop' : '/shop'" th:object="${shopPostForm}" method="post">
-                <label for="title">URL:</label>
-                <input id="title" type="text" th:field="*{url}"><br>
-
-                <div class="d-flex justify-content-center">
-                    <input class="btn btn-primary" type="submit" value="Share">
-                </div>
-            </form>
-
-            <a th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/maps' : '/maps'">
-                MAPで見る
-            </a><br>
-        </div>
+    <div th:each="shop : ${shopList}" class="container card mb-3 py-3">
+        <a th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/' + ${shop.getId()} : '/shop/' + ${shop.getId()}"
+           class="text-dark">
+            <div th:text="${shop.getName()}" class="text-dark h5"></div>
+            <div th:text="'住所: ' + ${shop.getAddress()}" class="text-muted"></div>
+            <div th:text="'営業時間: ' + ${shop.getHours()}" class="text-muted"></div>
+        </a>
     </div>
 </div>
 </body>
