@@ -102,8 +102,10 @@ class ShareController(
         val shopList = shopService.findByUserId(userId)
         val locationList = this.shopService.getLocationList(shopList)
 
+
         model.addAttribute("shopList", shopList)
         model.addAttribute("locationList", locationList)
+        model.addAttribute("shareUserId", userId)
         return "maps"
     }
 

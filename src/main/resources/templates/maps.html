@@ -6,6 +6,18 @@
 </head>
 <body>
 <div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="col p-3 mb-2 d-flex justify-content-center">
+            <a th:href="${shareUserId} ? '/share/' + ${shareUserId} : '/'" class="text-dark">
+                Listで見る
+            </a>
+        </div>
+        <div class="col p-3 mb-2 bg-light d-flex justify-content-center">
+            <a class="text-dark" href="#">
+                MAPで見る
+            </a>
+        </div>
+    </div>
     <div class="row" id="map">
     </div>
 </div>
