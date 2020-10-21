@@ -30,7 +30,6 @@
             const shibuya = {lat: 35.666, lng: 139.675};
             const map = new google.maps.Map(
                 document.getElementById('map'), {zoom: 10, center: shibuya});
-            new google.maps.Marker({position: shibuya, map: map});
             locationList.forEach((location, i) => {
                 const marker = new google.maps.Marker({position: location, map: map, title: shopList[i].name});
                 const infoWindow = new google.maps.InfoWindow({
