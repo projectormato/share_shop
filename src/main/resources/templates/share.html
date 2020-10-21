@@ -19,7 +19,9 @@
             <div class="form-group col">
                 <label for="email">email address:</label>
                 <input id="email" type="email" class="form-control" th:field="*{email}" placeholder="email">
-                <small id="emailHelp" class="form-text text-muted">共有したいユーザのEmailを入力してください</small>
+                <small id="emailHelp" class="form-text text-muted">
+                    ShareShopにログインしたことのあるユーザのみ追加できます
+                </small>
             </div>
             <div class="col mt-4">
                 <button type="submit" class="btn btn-outline-warning">Share</button>
