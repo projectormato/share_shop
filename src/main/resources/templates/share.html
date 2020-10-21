@@ -6,29 +6,34 @@
 </head>
 <body>
 <div class="container" layout:fragment="content">
-    <div class="row">
-        <h2>あなたの共有URL</h2>
-        <p th:text="${url}"></p>
-    </div>
+    <div class="h3 mt-3">あなたの共有URL</div>
+    <form>
+        <div class="form-group">
+            <input type="text" readonly class="form-control-plaintext" id="shareUrl" th:value="${url}">
+        </div>
+    </form>
 
-    <div class="row">
-        <h2>共有相手を追加</h2>
-        <form th:action="@{/share}" th:object="${shareForm}" method="post">
-            <label for="email">email address</label>
-            <input id="email" type="text" th:field="*{email}"><br>
-
-            <div class="d-flex justify-content-center">
-                <input class="btn btn-primary" type="submit" value="Share">
+    <div class="h3 mt-3">共有相手を追加</div>
+    <form th:action="@{/share}" th:object="${shareForm}" method="post">
+        <div class="row">
+            <div class="form-group col">
+                <label for="email">email address:</label>
+                <input id="email" type="email" class="form-control" th:field="*{email}" placeholder="email">
+                <small id="emailHelp" class="form-text text-muted">共有したいユーザのEmailを入力してください</small>
             </div>
-        </form>
-    </div>
+            <div class="col mt-4">
+                <button type="submit" class="btn btn-outline-warning">Share</button>
+            </div>
+        </div>
+    </form>
 
-    <div class="row">
-        <h2>共有中のユーザ</h2>
-        <div th:each="entry : ${shareEmailMap}" class="container card mb-3 py-3">
-            <div th:text="${entry.value}" class="row d-flex justify-content-center"></div>
-            <form th:action="@{/share/{id}(id=${entry.key})}" th:method="delete">
-                <input class="btn btn-danger" type="submit" value="削除する">
+    <div class="h3 mt-3">共有中のユーザ</div>
+    <div th:each="entry : ${shareEmailMap}" class="container card mb-3 py-3">
+        <div class="row">
+            <div th:text="${entry.value}" class="col d-flex align-items-center"></div>
+            <form th:action="@{/share/{id}(id=${entry.key})}" th:method="delete"
+                  class="col d-flex align-items-center mb-0">
+                <input class="btn btn-outline-warning" type="submit" value="Delete">
             </form>
         </div>
     </div>
