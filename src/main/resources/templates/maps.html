@@ -7,17 +7,15 @@
 <body>
 <div class="container" layout:fragment="content">
     <div class="row">
-        <div class="col p-3 mb-2 d-flex justify-content-center">
-            <a th:href="${shareUserId} ? '/share/' + ${shareUserId} : '/'" class="text-dark">
-                Listで見る
-            </a>
-        </div>
-        <div class="col p-3 mb-2 bg-light d-flex justify-content-center">
-            <a class="text-dark" href="#">
-                MAPで見る
-            </a>
-        </div>
+        <a th:href="${shareUserId} ? '/share/' + ${shareUserId} : '/'"
+           class="col p-3 mb-2 d-flex justify-content-center text-dark">
+            Listで見る
+        </a>
+        <a href="#" class="col p-3 mb-2 bg-light d-flex justify-content-center text-dark">
+            MAPで見る
+        </a>
     </div>
+
     <div class="row" id="map">
     </div>
 </div>
@@ -36,14 +34,15 @@
             locationList.forEach((location, i) => {
                 const marker = new google.maps.Marker({position: location, map: map, title: shopList[i].name});
                 const infoWindow = new google.maps.InfoWindow({
-                    content: "<div>" + shopList[i].name +  "</div>" +
-                    "<a href='" + shopList[i].url + "' target='_blank'>食べログで見る</a>",
+                    content: "<div>" + shopList[i].name + "</div>" +
+                        "<a href='" + shopList[i].url + "' target='_blank'>食べログで見る</a>",
                 });
                 marker.addListener("click", () => {
                     infoWindow.open(map, marker);
                 });
             })
         }
+
         /*]]>*/
     </script>
     <script defer type="text/javascript" th:inline="javascript"

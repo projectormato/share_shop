@@ -7,16 +7,13 @@
 <body>
 <div class="container" layout:fragment="content">
     <div class="row">
-        <div class="col p-3 mb-2 bg-light d-flex justify-content-center">
-            <a href="#" class="text-dark">
-                Listで見る
-            </a>
-        </div>
-        <div class="col p-3 mb-2 d-flex justify-content-center">
-            <a class="text-dark" th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/maps' : '/maps'">
-                MAPで見る
-            </a>
-        </div>
+        <a href="#" class="col p-3 mb-2 bg-light d-flex justify-content-center text-dark">
+            Listで見る
+        </a>
+        <a th:href="${shareUserId} ? '/share/' + ${shareUserId} + '/maps' : '/maps'"
+           class="col p-3 mb-2 d-flex justify-content-center text-dark">
+            MAPで見る
+        </a>
     </div>
 
     <form th:action="${shareUserId} ? '/share/' + ${shareUserId} + '/shop' : '/shop'" th:object="${shopPostForm}"
