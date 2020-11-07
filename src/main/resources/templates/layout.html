@@ -3,6 +3,7 @@
       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Share Shop</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel="stylesheet"
@@ -16,8 +17,8 @@
         <div class="layout_nav h1">Share Shop</div>
     </a>
 
-    <div class="d-flex" sec:authorize="isAuthenticated()">
-        <a class="btn btn-link" th:href="@{/shared}" role="button">共有されたリストを確認する</a>
+    <div class="d-flex nav_list" sec:authorize="isAuthenticated()">
+        <a class="btn btn-link text-left" th:href="@{/shared}" role="button">共有されたリストを確認する</a>
         <a class="btn btn-link" th:href="@{/share}" role="button">自分のお店リストをshareする</a>
         <form th:action="@{/logout}" method="post">
             <input class="btn btn-link" type="submit" value="ログアウト">

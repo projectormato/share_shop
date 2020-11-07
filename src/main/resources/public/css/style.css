@@ -9,7 +9,15 @@
 .layout_nav {
     margin: 0.5rem 0 0 0;
 }
+@media screen and (max-width: 900px) {
+    .nav_list {
+        flex-direction: column;
+    }
+    .navbar-brand {
+        margin-left: 1rem!important;
+    }
+}
 
 #map {
-    height: 80vh;
+    height: 65vh;
 }

@@ -19,13 +19,13 @@
     <form th:action="${shareUserId} ? '/share/' + ${shareUserId} + '/shop' : '/shop'" th:object="${shopPostForm}"
           method="post">
         <div class="row">
-            <div class="form-group col">
+            <div class="form-group col-8">
                 <label for="url">URL:</label>
                 <input type="text" class="form-control" id="url" placeholder="URL" th:field="*{url}">
                 <small id="urlHelp" class="form-text text-muted">現在食べログのURLのみ有効です</small>
             </div>
 
-            <div class="col mt-4">
+            <div class="col-4 mt-4">
                 <button type="submit" class="btn btn-outline-warning">Share</button>
             </div>
         </div>
