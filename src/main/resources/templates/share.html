@@ -16,14 +16,14 @@
     <div class="h3 mt-3">共有相手を追加</div>
     <form th:action="@{/share}" th:object="${shareForm}" method="post">
         <div class="row">
-            <div class="form-group col">
+            <div class="form-group col-8">
                 <label for="email">email address:</label>
                 <input id="email" type="email" class="form-control" th:field="*{email}" placeholder="email">
                 <small id="emailHelp" class="form-text text-muted">
                     ShareShopにログインしたことのあるユーザのみ追加できます
                 </small>
             </div>
-            <div class="col mt-4">
+            <div class="col-4 mt-4">
                 <button type="submit" class="btn btn-outline-warning">Share</button>
             </div>
         </div>

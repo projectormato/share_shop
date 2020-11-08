@@ -9,10 +9,11 @@
     <div class="h2 m-3">共有されているリスト</div>
     <div th:each="email,iter : ${sharedEmailList}" class="container card mb-3 py-3">
         <div class="row">
-            <div th:text="${email}" class="col d-flex align-items-center"></div>
-            <div th:text="${sharedUrlList.get(iter.index)}" class="col-5 d-flex align-items-center"></div>
+            <div th:text="${email}" class="col-3 align-items-center"></div>
+            <a th:text="${sharedUrlList.get(iter.index)}" th:href="${sharedUrlList.get(iter.index)}"
+               class="col-6 align-items-center"></a>
             <form th:action="@{/shared/{id}(id=${sharedList.get(iter.index).getId()})}" th:method="delete"
-                  class="col d-flex align-items-center mb-0">
+                  class="col-3 align-items-center mb-0">
                 <input class="btn btn-outline-warning" type="submit" value="Delete">
             </form>
         </div>
