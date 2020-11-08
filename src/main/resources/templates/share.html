@@ -10,6 +10,7 @@
     <form>
         <div class="form-group">
             <input type="text" readonly class="form-control-plaintext" id="shareUrl" th:value="${url}">
+            <button type="button" class="btn btn-outline-secondary" onclick="copyUrl()">コピーする</button>
         </div>
     </form>
 
@@ -39,6 +40,18 @@
             </form>
         </div>
     </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script type="text/javascript">
+        function copyUrl() {
+            const copyText = document.getElementById("shareUrl");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
+        }
+    </script>
 </div>
 </body>
 </html>
