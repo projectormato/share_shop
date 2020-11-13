@@ -134,17 +134,17 @@ class ShareController(
     fun sharedShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
         val sharedList = shareService.findBySharedId(user.name)
         model.addAttribute("sharedList", sharedList)
-        model.addAttribute("sharedUrlList", sharedList.map { getShareUrl(request, it) })
+        model.addAttribute("sharedUrlList", sharedList.map { getShareUrl(request, it.shareId) })
         model.addAttribute("sharedEmailList", userService.findByUserIds(sharedList.map { it.shareId }).map { it.email })
         return "shared"
     }
 
-    private fun getShareUrl(request: HttpServletRequest, it: Share): String {
+    private fun getShareUrl(request: HttpServletRequest, shareId: String): String {
         var domain = request.scheme + "://" + request.serverName
         if (request.serverPort != 80 && request.serverPort != 443) {
             domain += ":" + request.serverPort
         }
-        return domain + "/share/" + it.shareId
+        return "$domain/share/$shareId"
     }
 }
 
