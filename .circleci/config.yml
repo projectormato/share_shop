@@ -6,7 +6,7 @@ orbs:
 workflows:
   test_and_deploy:
     jobs:
-      - build
+      - test
       - start_deploy:
           type: approval
           requires:
@@ -16,7 +16,7 @@ workflows:
             - start_deploy
 
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/openjdk:11-jdk
       - image: mysql:8.0.15
