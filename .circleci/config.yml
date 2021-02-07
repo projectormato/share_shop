@@ -4,7 +4,7 @@ orbs:
   heroku: circleci/heroku@1.0.1
 
 workflows:
-  test_and_build:
+  test_and_deploy:
     jobs:
       - build
       - start_deploy:
