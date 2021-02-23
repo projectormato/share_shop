@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Share Shop</title>
+    <link rel="icon" type="image/png" href="/image/favicon.png" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel="stylesheet"
           href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
@@ -14,7 +15,7 @@
 <body class="facebook_bg">
 <nav class="navbar red_color">
     <a class="navbar-brand text-white ml-5" th:href="@{/}">
-        <div class="layout_nav h1">Share Shop</div>
+        <img alt="logo" src="/image/logo-normal.png">
     </a>
 
     <div class="d-flex nav_list" sec:authorize="isAuthenticated()">
