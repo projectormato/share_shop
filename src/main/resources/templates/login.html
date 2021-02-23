@@ -5,29 +5,36 @@
     <title>ログイン</title>
 </head>
 <body>
-<div class="container" layout:fragment="content">
-    <div class="row mt-4"><h1>行きたかったお店に行こう</h1></div>
-    <div class="row"><p>Share Shopは、行きたいお店を共有するためのサービスです</p></div>
-    <div class="row mb-4"><a th:href="@{/oauth2/authorization/google}">Googleでログインして始める</a></div>
-
-    <div class="row"><h2>使い方</h2></div>
-    <div class="row"><h3>STEP 1</h3></div>
-    <div class="row"><p>食べログのURLをシェアすると、Listで表示することが出来ます！</p></div>
-
-    <div class="row">
-        <img class="step-image" alt="top" src="/image/step1-1.png">
-        <img class="step-image" alt="top" src="/image/step1-2.png">
+<div class="container px-4" layout:fragment="content">
+    <div class="row mt-4 justify-content-center"><h2>行きたかったお店に行こう</h2></div>
+    <div class="row justify-content-center"><p>Share Shopは、行きたいお店を共有するためのサービスです</p></div>
+    <div class="row mb-5 justify-content-center">
+        <a th:href="@{/oauth2/authorization/google}">Googleでログインして始める</a>
     </div>
 
-    <div class="row"><h3>STEP 2</h3></div>
-    <div class="row"><p>「MAPで見る」タブでGoogle Map上で確認することが出来ます！</p></div>
-    <div class="row">
-        <img class="step-image" alt="top" src="/image/step2-1.png">
+    <div class="row justify-content-center"><h4>STEP 1</h4></div>
+    <div class="row justify-content-center"><p>食べログのURLをシェアすると、Listで表示することが出来ます。</p></div>
+
+    <div class="row mb-5 justify-content-center">
+        <img class="step-image" alt="step1-1" src="/image/step1-1.png">
+    </div>
+    <div class="row justify-content-center">
+        <img class="step-image" alt="step1-2" src="/image/step1-2.png">
     </div>
 
-    <div class="row"><h3>STEP 3</h3></div>
-    <div class="row"><p>「自分のお店リストをshareする」ボタンから、自分のお店リストをシェアすることが出来ます！</p></div>
+    <div class="row mt-5 justify-content-center"><h4>STEP 2</h4></div>
+    <div class="row justify-content-center"><p>「MAPで見る」タブでGoogle Map上で確認することが出来ます。</p></div>
+    <div class="row justify-content-center">
+        <img class="step-image" alt="step2-1" src="/image/step2-1.png">
+    </div>
+
+    <div class="row mt-5 justify-content-center"><h4>STEP 3</h4></div>
+    <div class="row justify-content-center">
+        <p>「自分のお店リストをshareする」ボタンから、自分のお店リストをシェアすることが出来ます。</p>
+    </div>
+    <div class="row mb-5 justify-content-center">
+        <a th:href="@{/oauth2/authorization/google}">Googleでログインして始める</a>
+    </div>
 </div>
-
 </body>
 </html>

@@ -6,12 +6,12 @@
     background-color: #F44336;
 }
 
-.layout_nav {
-    margin: 0.5rem 0 0 0;
+.ml-8 {
+    margin-left: 8rem;
 }
 
 .step-image {
-    width: 100vw;
+    width: 50vw;
 }
 
 @media screen and (max-width: 900px) {
@@ -21,6 +21,10 @@
 
     .navbar-brand {
         margin-left: 1rem !important;
+    }
+
+    .navbar {
+        padding: 0.5rem 0 !important;
     }
 
     .col-3, .col-6 {
