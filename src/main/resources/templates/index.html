@@ -23,6 +23,7 @@
                 <label for="url">URL:</label>
                 <input type="text" class="form-control" id="url" placeholder="URL" th:field="*{url}" required>
                 <small id="urlHelp" class="form-text text-muted">現在食べログのURLのみ有効です</small>
+                <small class="form-text text-muted" th:if="${error}">エラーだよ</small>
             </div>
 
             <div class="col-4 mt-4">

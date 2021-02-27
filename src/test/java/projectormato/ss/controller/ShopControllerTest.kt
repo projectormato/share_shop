@@ -20,10 +20,9 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店一覧ページにアクセスするとレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
-                .perform(get("/"))
-                .andDo(print())
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/"))
+            .andExpect(status().isOk)
+            .andReturn()
         assertEquals("index", mvcResult.modelAndView?.viewName)
     }
 
@@ -35,10 +34,9 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         //When
         val mvcResult = mockMvc.perform(get("/"))
-                .andDo(print())
-                .andExpect(status().isOk)
-                .andReturn()
-        val shopList = mvcResult.modelAndView!!.model["shopList"]
+            .andExpect(status().isOk)
+            .andReturn()
+        val shopList = mvcResult.modelAndView?.model?.get("shopList")
 
         // Then
         assertEquals("index", mvcResult.modelAndView?.viewName)
@@ -63,11 +61,10 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         // When
         val mvcResult = mockMvc
-                .perform(get("/"))
-                .andDo(print())
-                .andExpect(status().isOk)
-                .andReturn()
-        val shopList = mvcResult.modelAndView!!.model["shopList"]
+            .perform(get("/"))
+            .andExpect(status().isOk)
+            .andReturn()
+        val shopList = mvcResult.modelAndView?.model?.get("shopList")
 
         // Then
         if (shopList is List<*>) {
@@ -85,11 +82,12 @@ internal class ShopControllerTest : ControllerTestBase() {
 
     @Test
     fun URLをshareするとお店情報を取得してお店が作成されること() {
-        mockMvc.perform(MockMvcRequestBuilders.post("/shop")
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/shop")
                 .param("url", "https://tabelog.com/tokyo/A1321/A132101/13137795/")
-                .with(csrf()))
-                .andDo(print())
-                .andExpect(status().isFound)
+                .with(csrf())
+        )
+            .andExpect(status().isFound)
         val shopList = shopRepository.findAll()
 
         // NOTE: 食べログのサイトの情報をベタで持ってきてテストしている。スクレイピングのもっと良い方法あるかな
@@ -100,6 +98,22 @@ internal class ShopControllerTest : ControllerTestBase() {
     }
 
     @Test
+    fun 対応していないURLをshareするとお店が作成されないこと() {
+        val mvcResult = mockMvc.perform(
+            MockMvcRequestBuilders.post("/shop")
+                .param("url", "https://google.com")
+                .with(csrf())
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        assertEquals("index", mvcResult.modelAndView?.viewName)
+
+        val shopList = shopRepository.findAll()
+        assertEquals(0, shopList.size)
+    }
+
+    @Test
     fun お店詳細ページでお店の情報が表示されること() {
         // Given
         val shop = createShop(userId)
@@ -107,11 +121,10 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         //When
         val mvcResult = mockMvc
-                .perform(get("/shop/" + shop.id))
-                .andDo(print())
-                .andExpect(status().isOk)
-                .andReturn()
-        val actualShop = mvcResult.modelAndView!!.model["shop"]
+            .perform(get("/shop/" + shop.id))
+            .andExpect(status().isOk)
+            .andReturn()
+        val actualShop = mvcResult.modelAndView?.model?.get("shop")
 
         // Then
         assertEquals("detail", mvcResult.modelAndView?.viewName)
@@ -132,9 +145,9 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         //When
         val mvcResult = mockMvc.perform(get("/shop/" + otherShop.id))
-                .andDo(print()).andExpect(status().is3xxRedirection)
-                .andExpect(header().string("Location", "/"))
-                .andReturn()
+            .andExpect(status().is3xxRedirection)
+            .andExpect(header().string("Location", "/"))
+            .andReturn()
 
         // Then
         assertEquals("redirect:/", mvcResult.modelAndView?.viewName)
@@ -148,9 +161,8 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         //When
         mockMvc.perform(delete("/shop/" + shop.id))
-                .andDo(print())
-                .andExpect(status().isFound)
-                .andExpect(header().string("Location", "/"))
+            .andExpect(status().isFound)
+            .andExpect(header().string("Location", "/"))
 
         // Then 1件になる
         assertEquals(1, shopRepository.findAll().size)
@@ -165,9 +177,8 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         //When
         mockMvc.perform(delete("/shop/" + otherShop.id))
-                .andDo(print())
-                .andExpect(status().isFound)
-                .andExpect(header().string("Location", "/"))
+            .andExpect(status().isFound)
+            .andExpect(header().string("Location", "/"))
 
         // Then 2件ある
         assertEquals(2, shopRepository.findAll().size)
@@ -175,9 +186,7 @@ internal class ShopControllerTest : ControllerTestBase() {
 
     @Test
     fun お店一覧ページにアクセスするとユーザー情報が格納されること() {
-        mockMvc.perform(get("/"))
-                .andDo(print())
-                .andExpect(status().isOk)
+        mockMvc.perform(get("/")).andExpect(status().isOk)
 
         val user = userRepository.findFirstByUserId(userId)
         assertEquals(userId, user?.userId)

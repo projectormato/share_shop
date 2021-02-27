@@ -14,7 +14,6 @@ internal class HelloControllerTest : ControllerTestBase() {
     fun helloページにアクセスしたらレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
                 .perform(get("/hello"))
-                .andDo(print())
                 .andExpect(status().isOk)
                 .andReturn()
 

@@ -56,9 +56,10 @@ class ShopController(
     }
 
     @PostMapping(path = ["/shop"])
-    fun postShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm): String {
+    fun postShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm, model: Model): String {
         if (!form.url.startsWith("https://tabelog.com/")) {
-            return "redirect:/"
+            model.addAttribute("error", "エラーだよ")
+            return shopList(user, model)
         }
         if (this.shopService.findByUserId(user.name).size >= 50) {
             return "redirect:/"
