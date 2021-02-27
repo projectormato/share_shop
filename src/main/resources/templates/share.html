@@ -11,6 +11,7 @@
         <div class="form-group">
             <input type="text" readonly class="form-control-plaintext" id="shareUrl" th:value="${url}">
             <button type="button" class="btn btn-outline-secondary" onclick="copyUrl()">コピーする</button>
+            <p class="text-danger" th:text="${error}"></p>
         </div>
     </form>
 

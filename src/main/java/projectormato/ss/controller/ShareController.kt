@@ -17,11 +17,12 @@ import projectormato.ss.service.ShopInfo
 import projectormato.ss.service.ShopService
 import projectormato.ss.service.UserService
 import javax.servlet.http.HttpServletRequest
+
 @Controller
 class ShareController(
-        private val userService: UserService,
-        private val shareService: ShareService,
-        private val shopService: ShopService
+    private val userService: UserService,
+    private val shareService: ShareService,
+    private val shopService: ShopService
 ) {
 
     @GetMapping(path = ["/share"])
@@ -37,20 +38,26 @@ class ShareController(
     }
 
     @PostMapping(path = ["/share"])
-    fun shareShop(@AuthenticationPrincipal user: OAuth2User, form: ShareForm): String {
+    fun shareShop(
+        @AuthenticationPrincipal user: OAuth2User,
+        form: ShareForm,
+        model: Model,
+        request: HttpServletRequest
+    ): String {
         if (user.attributes["email"] == form.email) {
             return "redirect:/share"
         }
         if (shareService.findByShareId(user.name).size >= 100) {
-            return "redirect:/share"
+            model.addAttribute("error", " 100人以上と同時に共有することは出来ません")
+            return shareShopList(user, model, request)
         }
-        // NOTE: ユーザ情報が登録されていないemailの場合特に何も返さない(ユーザが登録しているか分からないようにするため)
+        // NOTE: ユーザ情報が登録されていないemailの場合特に何も返さない(該当emailでユーザが登録しているか分からないようにするため)
         val sharedUser = userService.findByEmail(form.email) ?: return "redirect:/share"
         shareService.save(
-                Share.builder()
-                        .shareId(user.name)
-                        .sharedId(sharedUser.userId)
-                        .build()
+            Share.builder()
+                .shareId(user.name)
+                .sharedId(sharedUser.userId)
+                .build()
         )
         return "redirect:/share"
     }
@@ -68,7 +75,11 @@ class ShareController(
     }
 
     @GetMapping(path = ["/share/{userId}"])
-    fun anotherUserShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String): String {
+    fun anotherUserShopList(
+        @AuthenticationPrincipal user: OAuth2User,
+        model: Model,
+        @PathVariable userId: String
+    ): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/shop"
         }
@@ -79,7 +90,12 @@ class ShareController(
     }
 
     @GetMapping(path = ["/share/{userId}/{id}"])
-    fun anotherUserShopDetail(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String, @PathVariable id: Long): String {
+    fun anotherUserShopDetail(
+        @AuthenticationPrincipal user: OAuth2User,
+        model: Model,
+        @PathVariable userId: String,
+        @PathVariable id: Long
+    ): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/shop"
         }
@@ -95,7 +111,11 @@ class ShareController(
     }
 
     @GetMapping(path = ["/share/{userId}/maps"])
-    fun anotherUserShopMap(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String): String {
+    fun anotherUserShopMap(
+        @AuthenticationPrincipal user: OAuth2User,
+        model: Model,
+        @PathVariable userId: String
+    ): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/shop"
         }
@@ -110,7 +130,11 @@ class ShareController(
     }
 
     @PostMapping(path = ["/share/{userId}/shop"])
-    fun anotherUserPostShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm, @PathVariable userId: String): String {
+    fun anotherUserPostShop(
+        @AuthenticationPrincipal user: OAuth2User,
+        form: ShopPostForm,
+        @PathVariable userId: String
+    ): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
             return "redirect:/shop"
         }
@@ -119,13 +143,13 @@ class ShareController(
         }
         val shopInfo: ShopInfo = shopService.scrapingPage(form.url)
         shopService.save(
-                Shop.builder()
-                        .userId(userId)
-                        .url(form.url)
-                        .name(shopInfo.name)
-                        .address(shopInfo.address)
-                        .hours(shopInfo.hours)
-                        .build()
+            Shop.builder()
+                .userId(userId)
+                .url(form.url)
+                .name(shopInfo.name)
+                .address(shopInfo.address)
+                .hours(shopInfo.hours)
+                .build()
         )
         return "redirect:/share/$userId"
     }
