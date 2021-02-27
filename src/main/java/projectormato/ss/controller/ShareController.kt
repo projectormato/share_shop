@@ -70,7 +70,7 @@ class ShareController(
     @GetMapping(path = ["/share/{userId}"])
     fun anotherUserShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
-            return "redirect:/"
+            return "redirect:/shop"
         }
         model.addAttribute("shopList", shopService.findByUserId(userId))
         model.addAttribute("shopPostForm", ShopPostForm(""))
@@ -81,7 +81,7 @@ class ShareController(
     @GetMapping(path = ["/share/{userId}/{id}"])
     fun anotherUserShopDetail(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String, @PathVariable id: Long): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
-            return "redirect:/"
+            return "redirect:/shop"
         }
 
         val shop = shopService.findByIdAndUserId(id, userId)
@@ -90,14 +90,14 @@ class ShareController(
             model.addAttribute("isAnotherUser", true)
             "detail"
         } else {
-            "redirect:/"
+            "redirect:/shop"
         }
     }
 
     @GetMapping(path = ["/share/{userId}/maps"])
     fun anotherUserShopMap(@AuthenticationPrincipal user: OAuth2User, model: Model, @PathVariable userId: String): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
-            return "redirect:/"
+            return "redirect:/shop"
         }
         val shopList = shopService.findByUserId(userId)
         val locationList = this.shopService.getLocationList(shopList)
@@ -112,7 +112,7 @@ class ShareController(
     @PostMapping(path = ["/share/{userId}/shop"])
     fun anotherUserPostShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm, @PathVariable userId: String): String {
         if (shareService.findByShareIdAndSharedId(userId, user.name) == null) {
-            return "redirect:/"
+            return "redirect:/shop"
         }
         if (!form.url.startsWith("https://tabelog.com/")) {
             return "redirect:/share/$userId"

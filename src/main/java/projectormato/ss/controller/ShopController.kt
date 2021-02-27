@@ -17,19 +17,24 @@ import projectormato.ss.service.UserService
 
 @Controller
 class ShopController(
-        private val shopService: ShopService,
-        private val userService: UserService
+    private val shopService: ShopService,
+    private val userService: UserService
 ) {
 
     @GetMapping(path = ["/"])
+    fun index(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
+        return "redirect:/shop"
+    }
+
+    @GetMapping(path = ["/shop"])
     fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
         // NOTE: userのnameとemailの対応付けを持っておくためにDBに格納しておく
         if (userService.findByUserId(user.name) == null) {
             userService.save(
-                    User.builder()
-                            .userId(user.name)
-                            .email(user.attributes["email"]?.toString())
-                            .build()
+                User.builder()
+                    .userId(user.name)
+                    .email(user.attributes["email"]?.toString())
+                    .build()
             )
         }
         model.addAttribute("shopList", shopService.findByUserId(user.name))
@@ -45,35 +50,36 @@ class ShopController(
             model.addAttribute("isAnotherUser", false)
             "detail"
         } else {
-            "redirect:/"
+            "redirect:/shop"
         }
     }
 
     @DeleteMapping(path = ["/shop/{id}"])
     fun deleteShop(@AuthenticationPrincipal user: OAuth2User, @PathVariable id: Long): String {
         shopService.deleteById(id, user.name)
-        return "redirect:/"
+        return "redirect:/shop"
     }
 
     @PostMapping(path = ["/shop"])
     fun postShop(@AuthenticationPrincipal user: OAuth2User, form: ShopPostForm, model: Model): String {
         if (!form.url.startsWith("https://tabelog.com/")) {
-            model.addAttribute("error", "エラーだよ")
+            model.addAttribute("error", "食べログのURLを入力してください")
             return shopList(user, model)
         }
         if (this.shopService.findByUserId(user.name).size >= 50) {
-            return "redirect:/"
+            model.addAttribute("error", "お店を50件を超えて登録は出来ません")
+            return shopList(user, model)
         }
         val shopInfo: ShopInfo = shopService.scrapingPage(form.url)
         shopService.save(
-                Shop.builder()
-                        .userId(user.name)
-                        .url(form.url)
-                        .name(shopInfo.name)
-                        .address(shopInfo.address)
-                        .hours(shopInfo.hours)
-                        .build()
+            Shop.builder()
+                .userId(user.name)
+                .url(form.url)
+                .name(shopInfo.name)
+                .address(shopInfo.address)
+                .hours(shopInfo.hours)
+                .build()
         )
-        return "redirect:/"
+        return "redirect:/shop"
     }
 }

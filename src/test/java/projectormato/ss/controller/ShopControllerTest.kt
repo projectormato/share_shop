@@ -7,7 +7,6 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import projectormato.ss.entity.Shop
@@ -20,7 +19,7 @@ internal class ShopControllerTest : ControllerTestBase() {
     @Test
     fun お店一覧ページにアクセスするとレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
-            .perform(get("/"))
+            .perform(get("/shop"))
             .andExpect(status().isOk)
             .andReturn()
         assertEquals("index", mvcResult.modelAndView?.viewName)
@@ -33,7 +32,7 @@ internal class ShopControllerTest : ControllerTestBase() {
         shopRepository.saveAll(listOf(shop, createShop(anotherUserId)))
 
         //When
-        val mvcResult = mockMvc.perform(get("/"))
+        val mvcResult = mockMvc.perform(get("/shop"))
             .andExpect(status().isOk)
             .andReturn()
         val shopList = mvcResult.modelAndView?.model?.get("shopList")
@@ -61,7 +60,7 @@ internal class ShopControllerTest : ControllerTestBase() {
 
         // When
         val mvcResult = mockMvc
-            .perform(get("/"))
+            .perform(get("/shop"))
             .andExpect(status().isOk)
             .andReturn()
         val shopList = mvcResult.modelAndView?.model?.get("shopList")
@@ -106,7 +105,6 @@ internal class ShopControllerTest : ControllerTestBase() {
         )
             .andExpect(status().isOk)
             .andReturn()
-
         assertEquals("index", mvcResult.modelAndView?.viewName)
 
         val shopList = shopRepository.findAll()
@@ -146,11 +144,11 @@ internal class ShopControllerTest : ControllerTestBase() {
         //When
         val mvcResult = mockMvc.perform(get("/shop/" + otherShop.id))
             .andExpect(status().is3xxRedirection)
-            .andExpect(header().string("Location", "/"))
+            .andExpect(header().string("Location", "/shop"))
             .andReturn()
 
         // Then
-        assertEquals("redirect:/", mvcResult.modelAndView?.viewName)
+        assertEquals("redirect:/shop", mvcResult.modelAndView?.viewName)
     }
 
     @Test
@@ -162,7 +160,7 @@ internal class ShopControllerTest : ControllerTestBase() {
         //When
         mockMvc.perform(delete("/shop/" + shop.id))
             .andExpect(status().isFound)
-            .andExpect(header().string("Location", "/"))
+            .andExpect(header().string("Location", "/shop"))
 
         // Then 1件になる
         assertEquals(1, shopRepository.findAll().size)
@@ -178,7 +176,7 @@ internal class ShopControllerTest : ControllerTestBase() {
         //When
         mockMvc.perform(delete("/shop/" + otherShop.id))
             .andExpect(status().isFound)
-            .andExpect(header().string("Location", "/"))
+            .andExpect(header().string("Location", "/shop"))
 
         // Then 2件ある
         assertEquals(2, shopRepository.findAll().size)
@@ -186,7 +184,7 @@ internal class ShopControllerTest : ControllerTestBase() {
 
     @Test
     fun お店一覧ページにアクセスするとユーザー情報が格納されること() {
-        mockMvc.perform(get("/")).andExpect(status().isOk)
+        mockMvc.perform(get("/shop")).andExpect(status().isOk)
 
         val user = userRepository.findFirstByUserId(userId)
         assertEquals(userId, user?.userId)
