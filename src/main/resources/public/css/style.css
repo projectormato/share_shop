@@ -31,6 +31,10 @@
         max-width: 100%;
         margin-bottom: 10px;
     }
+
+    .step-image {
+        width: 75vw;
+    }
 }
 
 #map {
