@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 class HelloController {
-
     @GetMapping(path = ["/hello"])
-    fun hello(): String {
-        return "hello";
-    }
+    fun hello(): String = "hello";
 }

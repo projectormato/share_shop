@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 open class ShareShopApplication
 
 fun main(args: Array<String>) {
-	runApplication<ShareShopApplication>(*args)
+    runApplication<ShareShopApplication>(*args)
 }

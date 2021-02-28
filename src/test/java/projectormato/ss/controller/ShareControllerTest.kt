@@ -21,9 +21,9 @@ internal class ShareControllerTest : ControllerTestBase() {
     @Test
     fun お店共有ページにアクセスするとレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
-                .perform(get("/share"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/share"))
+            .andExpect(status().isOk)
+            .andReturn()
 
         assertEquals("share", mvcResult.modelAndView?.viewName)
     }
@@ -31,9 +31,9 @@ internal class ShareControllerTest : ControllerTestBase() {
     @Test
     fun お店共有ページにアクセスすると自分の共有用URLが返ること() {
         val mvcResult = mockMvc
-                .perform(get("/share"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/share"))
+            .andExpect(status().isOk)
+            .andReturn()
         val url = mvcResult.modelAndView?.model?.get("url")
 
         assertEquals(mvcResult.request.requestURL.toString() + "/" + userId, url)
@@ -46,9 +46,9 @@ internal class ShareControllerTest : ControllerTestBase() {
         shareRepository.save(share)
 
         val mvcResult = mockMvc
-                .perform(get("/share"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/share"))
+            .andExpect(status().isOk)
+            .andReturn()
         val shareEmailMap = mvcResult.modelAndView?.model?.get("shareEmailMap")
 
         if (shareEmailMap is Map<*, *>) {
@@ -62,10 +62,12 @@ internal class ShareControllerTest : ControllerTestBase() {
     fun お店をshareするとshare情報が入ること() {
         userRepository.save(createUser(anotherUserId, anotherUserEmail))
 
-        mockMvc.perform(post("/share")
+        mockMvc.perform(
+            post("/share")
                 .param("email", anotherUserEmail)
-                .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isFound)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+        )
+            .andExpect(status().isFound)
         val sharedList = shareRepository.findAll()
 
         assertEquals(userId, sharedList[0].shareId)
@@ -76,11 +78,13 @@ internal class ShareControllerTest : ControllerTestBase() {
     fun 自分自身とshareできないこと() {
         userRepository.save(createUser(userId, userEmail))
 
-        mockMvc.perform(post("/share")
+        mockMvc.perform(
+            post("/share")
                 .param("email", userEmail)
-                .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isFound)
-                .andExpect(MockMvcResultMatchers.header().string("Location", "/share"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+        )
+            .andExpect(status().isFound)
+            .andExpect(MockMvcResultMatchers.header().string("Location", "/share"))
 
         assertEquals(0, shareRepository.findAll().size)
     }
@@ -92,8 +96,8 @@ internal class ShareControllerTest : ControllerTestBase() {
 
         //When
         mockMvc.perform(MockMvcRequestBuilders.delete("/share/" + share.id))
-                .andExpect(status().isFound)
-                .andExpect(MockMvcResultMatchers.header().string("Location", "/share"))
+            .andExpect(status().isFound)
+            .andExpect(MockMvcResultMatchers.header().string("Location", "/share"))
 
         // Then
         assertEquals(0, shareRepository.findAll().size)
@@ -106,8 +110,8 @@ internal class ShareControllerTest : ControllerTestBase() {
 
         //When
         mockMvc.perform(MockMvcRequestBuilders.delete("/shared/" + share.id))
-                .andExpect(status().isFound)
-                .andExpect(MockMvcResultMatchers.header().string("Location", "/shared"))
+            .andExpect(status().isFound)
+            .andExpect(MockMvcResultMatchers.header().string("Location", "/shared"))
 
         // Then
         assertEquals(0, shareRepository.findAll().size)
@@ -120,9 +124,9 @@ internal class ShareControllerTest : ControllerTestBase() {
 
         // When
         val mvcResult = mockMvc
-                .perform(get("/share/$anotherUserId"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/share/$anotherUserId"))
+            .andExpect(status().isOk)
+            .andReturn()
         val shopList = mvcResult.modelAndView?.model?.get("shopList")
 
         // Then
@@ -146,9 +150,9 @@ internal class ShareControllerTest : ControllerTestBase() {
 
         // When
         val mvcResult = mockMvc
-                .perform(get("/share/$anotherUserId/maps"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/share/$anotherUserId/maps"))
+            .andExpect(status().isOk)
+            .andReturn()
         val locationList = mvcResult.modelAndView?.model?.get("locationList")
 
         // Then
@@ -173,9 +177,9 @@ internal class ShareControllerTest : ControllerTestBase() {
 
         //When
         val mvcResult = mockMvc
-                .perform(get("/share/$anotherUserId/" + expectedShop.id))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/share/$anotherUserId/" + expectedShop.id))
+            .andExpect(status().isOk)
+            .andReturn()
         val actualShop = mvcResult.modelAndView?.model?.get("shop")
 
         // Then
@@ -193,10 +197,12 @@ internal class ShareControllerTest : ControllerTestBase() {
         userRepository.save(createUser(anotherUserId, anotherUserEmail))
         shareRepository.save(createShare(anotherUserId, userId))
 
-        mockMvc.perform(post("/share/$anotherUserId/shop")
+        mockMvc.perform(
+            post("/share/$anotherUserId/shop")
                 .param("url", "https://tabelog.com/tokyo/A1321/A132101/13137795/")
-                .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isFound)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+        )
+            .andExpect(status().isFound)
         val shopList = shopRepository.findAll()
 
         // NOTE: 食べログのサイトの情報をベタで持ってきてテストしている。スクレイピングのもっと良い方法あるかな
@@ -211,9 +217,9 @@ internal class ShareControllerTest : ControllerTestBase() {
         setUpShare()
 
         val mvcResult = mockMvc
-                .perform(get("/shared"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/shared"))
+            .andExpect(status().isOk)
+            .andReturn()
         val sharedUrlList = mvcResult.modelAndView?.model?.get("sharedUrlList")
         val sharedEmailList = mvcResult.modelAndView?.model?.get("sharedEmailList")
 

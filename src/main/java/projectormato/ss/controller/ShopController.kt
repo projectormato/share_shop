@@ -20,7 +20,6 @@ class ShopController(
     private val shopService: ShopService,
     private val userService: UserService
 ) {
-
     @GetMapping(path = ["/"])
     fun index(): String {
         return "redirect:/shop"

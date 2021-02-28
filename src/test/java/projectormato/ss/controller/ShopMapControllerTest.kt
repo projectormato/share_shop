@@ -16,9 +16,9 @@ internal class ShopMapControllerTest() : ControllerTestBase() {
     @Test
     fun お店MAPページにアクセスするとレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
-                .perform(get("/maps"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/maps"))
+            .andExpect(status().isOk)
+            .andReturn()
         assertEquals("maps", mvcResult.modelAndView?.viewName)
     }
 
@@ -30,9 +30,9 @@ internal class ShopMapControllerTest() : ControllerTestBase() {
 
         // When
         val mvcResult = mockMvc
-                .perform(get("/maps"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/maps"))
+            .andExpect(status().isOk)
+            .andReturn()
         val shopList = mvcResult.modelAndView?.model?.get("shopList")
         val locationList = mvcResult.modelAndView?.model?.get("locationList")
 

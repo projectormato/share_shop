@@ -24,7 +24,6 @@ class ShareController(
     private val shareService: ShareService,
     private val shopService: ShopService
 ) {
-
     @GetMapping(path = ["/share"])
     fun shareShopList(@AuthenticationPrincipal user: OAuth2User, model: Model, request: HttpServletRequest): String {
         val shareList = shareService.findByShareId(user.name)

@@ -12,9 +12,9 @@ internal class LoginControllerTest : ControllerTestBase() {
     @Test
     fun loginページにアクセスしたらレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
-                .perform(get("/login"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/login"))
+            .andExpect(status().isOk)
+            .andReturn()
 
         Assertions.assertEquals("login", mvcResult.modelAndView?.viewName)
     }

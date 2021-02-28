@@ -1,9 +1,5 @@
 package projectormato.ss.controller
 
-import com.google.gson.GsonBuilder
-import com.google.maps.GeoApiContext
-import com.google.maps.GeocodingApi
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Controller
@@ -13,7 +9,6 @@ import projectormato.ss.service.ShopService
 
 @Controller
 class ShopMapController(private val shopService: ShopService) {
-
     @GetMapping(path = ["/maps"])
     fun shopMap(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
         val shopList = shopService.findByUserId(user.name)

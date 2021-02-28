@@ -12,9 +12,9 @@ internal class HelloControllerTest : ControllerTestBase() {
     @Test
     fun helloページにアクセスしたらレスポンス200と想定したviewが返ること() {
         val mvcResult = mockMvc
-                .perform(get("/hello"))
-                .andExpect(status().isOk)
-                .andReturn()
+            .perform(get("/hello"))
+            .andExpect(status().isOk)
+            .andReturn()
 
         assertEquals("hello", mvcResult.modelAndView?.viewName)
     }
