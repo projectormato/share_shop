@@ -30,13 +30,11 @@ class ShopController(
     fun shopList(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
         // NOTE: userのnameとemailの対応付けを持っておくためにDBに格納しておく
         if (userService.findByUserId(user.name) == null) {
-            userService.save(
-                User.builder()
-                    .userId(user.name)
-                    .email(user.attributes["email"]?.toString())
-                    .build()
-            )
+            user.attributes["email"]?.let {
+                userService.save(User(userId = user.name, email = it.toString()))
+            }
         }
+
         model.addAttribute("shopList", shopService.findByUserId(user.name))
         model.addAttribute("shopPostForm", ShopPostForm(""))
         return "index"
@@ -72,13 +70,13 @@ class ShopController(
         }
         val shopInfo: ShopInfo = shopService.scrapingPage(form.url)
         shopService.save(
-            Shop.builder()
-                .userId(user.name)
-                .url(form.url)
-                .name(shopInfo.name)
-                .address(shopInfo.address)
-                .hours(shopInfo.hours)
-                .build()
+            Shop(
+                userId = user.name,
+                url = form.url,
+                name = shopInfo.name,
+                address = shopInfo.address,
+                hours = shopInfo.hours
+            )
         )
         return "redirect:/shop"
     }

@@ -54,10 +54,7 @@ class ShareController(
         // NOTE: ユーザ情報が登録されていないemailの場合特に何も返さない(該当emailでユーザが登録しているか分からないようにするため)
         val sharedUser = userService.findByEmail(form.email) ?: return "redirect:/share"
         shareService.save(
-            Share.builder()
-                .shareId(user.name)
-                .sharedId(sharedUser.userId)
-                .build()
+            Share(shareId = user.name, sharedId = sharedUser.userId)
         )
         return "redirect:/share"
     }
@@ -143,13 +140,13 @@ class ShareController(
         }
         val shopInfo: ShopInfo = shopService.scrapingPage(form.url)
         shopService.save(
-            Shop.builder()
-                .userId(userId)
-                .url(form.url)
-                .name(shopInfo.name)
-                .address(shopInfo.address)
-                .hours(shopInfo.hours)
-                .build()
+            Shop(
+                userId = userId,
+                url = form.url,
+                name = shopInfo.name,
+                address = shopInfo.address,
+                hours = shopInfo.hours
+            )
         )
         return "redirect:/share/$userId"
     }

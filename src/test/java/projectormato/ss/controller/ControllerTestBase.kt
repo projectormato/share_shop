@@ -43,9 +43,15 @@ open class ControllerTestBase {
         shareRepository.deleteAll()
     }
 
-    protected fun createShop(userId: String): Shop = Shop.builder().url("https://tabelog.com/tokyo/A1321/A132101/13137795/").name("shop1").address("tokyo").hours("all time").userId(userId).build()
+    protected fun createShop(userId: String): Shop = Shop(
+        userId = userId,
+        url = "https://tabelog.com/tokyo/A1321/A132101/13137795/",
+        name = "shop1",
+        address = "tokyo",
+        hours = "all time"
+    )
 
-    protected fun createUser(userId: String, email: String): User = User.builder().userId(userId).email(email).build()
+    protected fun createUser(userId: String, email: String): User = User(userId = userId, email = email)
 
-    protected fun createShare(shareId: String, sharedId: String): Share = Share.builder().shareId(shareId).sharedId(sharedId).build()
+    protected fun createShare(shareId: String, sharedId: String): Share = Share(shareId = shareId, sharedId = sharedId)
 }
