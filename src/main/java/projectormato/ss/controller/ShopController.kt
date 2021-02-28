@@ -22,7 +22,7 @@ class ShopController(
 ) {
 
     @GetMapping(path = ["/"])
-    fun index(@AuthenticationPrincipal user: OAuth2User, model: Model): String {
+    fun index(): String {
         return "redirect:/shop"
     }
 

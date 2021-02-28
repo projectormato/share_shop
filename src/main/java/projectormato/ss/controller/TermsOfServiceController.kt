@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 class TermsOfServiceController {
 
     @GetMapping(path = ["/terms"])
-    fun hello(): String {
+    fun terms(): String {
         return "terms";
     }
 }
