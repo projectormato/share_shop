@@ -13,7 +13,13 @@ import projectormato.ss.repository.ShopRepository
 class ShopService(private val shopRepository: ShopRepository) {
 
     @Value("\${ss.geocoding}")
-    val geocodingApiKey = ""
+    private val geocodingApiKey = ""
+
+    private val geoApiContext: GeoApiContext by lazy {
+        GeoApiContext.Builder()
+            .apiKey(geocodingApiKey)
+            .build()
+    }
 
     fun findByUserId(userId: String): List<Shop> = shopRepository.findByUserId(userId)
 
@@ -51,18 +57,10 @@ class ShopService(private val shopRepository: ShopRepository) {
     }
 
     fun getLocationList(shopList: List<Shop>): List<LatLng?> {
-        // TODO: 毎回生成しないようにする
-        val context = geoApiContext()
         return shopList.map {
-            val await = GeocodingApi.geocode(context, it.address).await()
+            val await = GeocodingApi.geocode(geoApiContext, it.address).await()
             if (await.isNotEmpty()) await[0].geometry.location else null
         }
-    }
-
-    private fun geoApiContext(): GeoApiContext {
-        return GeoApiContext.Builder()
-                .apiKey(geocodingApiKey)
-                .build()
     }
 }
 

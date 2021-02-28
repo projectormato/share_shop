@@ -22,7 +22,6 @@ open class ControllerTestBase {
 
     protected lateinit var mockMvc: MockMvc
 
-    // TODO: Autowiredなくしたい by tomato
     @Autowired
     protected lateinit var webApplicationContext: WebApplicationContext
 
