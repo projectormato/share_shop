@@ -3,11 +3,6 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-
-    // NOTE: EntityのKotlin化する時に使う
-//    id "org.jetbrains.kotlin.plugin.spring" version "1.4.10"
-//    id "org.jetbrains.kotlin.plugin.noarg" version "1.4.10"
-//    id "org.jetbrains.kotlin.plugin.jpa" version "1.4.10"
 }
 
 version = '0.0.1'
